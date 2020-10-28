@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>
+        <p class="login">
             {{ title }}
         </p>
     </div>
@@ -15,3 +15,6 @@ export default {
     }
 }
 </script>
+<style lang="less" scoped>
+@import './login.less';
+</style>
