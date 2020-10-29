@@ -2,28 +2,43 @@
     <div>
         <el-row>
             <el-button type="primary" icon="el-icon-plus" @click="add">增加</el-button>
-            <el-input v-model="input" placeholder="请输入内容"/>
+            <el-input v-model="input" placeholder="请输入标题" clearable/>
             <el-button type="success" icon="el-icon-search" @click="queryBanner">搜索</el-button>
         </el-row>
         <el-table
             :data="tableData"
             style="width: 100%"
+            v-loading="tableLoading"
         >
-            <el-table-column type="index" label="序号" prop="index" width="100" fixed="left"/>
+            <el-table-column type="index" label="序号" prop="index" width="100" fixed="left" align="center"/>
             <!-- <el-table-column
                 prop="bid"
                 label="编号"
                 width="180"
                 style="display:none"
             /> -->
-            <el-table-column prop="title" label="标题" width="180"/>
-            <el-table-column prop="about" label="介绍" width="600"/>
-            <el-table-column label="封面" width="200">
+            <el-table-column prop="title" label="标题" width="180" header-align="center"/>
+            <el-table-column prop="about" label="介绍" width="600" header-align="center" class="longText"/>
+            <el-table-column label="封面" width="200" header-align="center">
                 <template slot-scope="scope">
                     <img :src="scope.row.img" width="100%" height="100%" class="img"/>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" max-width=150>
+            <el-table-column label="是否在首页展示" width="150" align="center">
+                <template slot-scope="scope">
+                    <el-switch
+                        v-model="scope.row.isshow"
+                        :active-value=1
+                        :inactive-value=0
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="是"
+                        inactive-text="否"
+                        @change="changeShow(scope.row)">
+                    </el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" max-width=150 align="center">
                 <template slot-scope="scope">
                     <el-button type="text" @click="edit(scope.row)">修改</el-button>
                     <el-button type="text" @click="del(scope.row)">删除</el-button>
@@ -49,6 +64,7 @@ export default {
         return {
             input: '',
             tableData: [],
+            tableLoading: true,
             show: false,
             editDialog: false,
             rowData: []
@@ -57,7 +73,12 @@ export default {
     },
     methods: {
         queryBanner () {
-            this.$axios.get('/index/queryBanner').then(res => {
+            this.tableLoading = true
+            let params = {
+                title: this.input || ''
+            }
+            this.$axios.get('/src/main/queryBanner', {params}).then(res => {
+                this.tableLoading = false
                 this.tableData = res.data
             }).catch(err => {
                 console.log(err)
@@ -85,6 +106,22 @@ export default {
                     console.error(error.message)
                 })
             }).catch(_ => {})
+        },
+        changeShow (row) {
+            let params = {
+                bid: row.bid,
+                isshow: row.isshow
+            }
+            this.$axios.post('/changeShow', params).then(res => {
+                console.log(res)
+                if (res.status === 200) {
+                    row.isshow === 0 ? this.$message.error('已在首页中移除') : this.$message.success('已在首页中展示')
+                    // this.$message.success(`${row.isshow === 0 ? '已在首页中移除' : '已在首页中展示'}`)
+                    this.queryBanner()
+                }
+            }).catch(error => {
+                console.error(error.message)
+            })
         }
     },
     created () {
