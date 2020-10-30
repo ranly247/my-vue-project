@@ -2,6 +2,7 @@
     <el-dialog
         title="新增"
         :visible.sync="addVisible"
+        :show="show"
         @close="$emit('update:show', false)"
         width="30%"
         :before-close="handleClose"

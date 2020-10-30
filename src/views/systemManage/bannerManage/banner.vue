@@ -47,7 +47,7 @@
             </el-table-column>
         </el-table>
         <add-dialog :show.sync="show"/>
-        <rank-dialog :show.sync="showRank"/>
+        <rank-dialog :show.sync="showRank" ref="header"/>
         <edit-dialog v-model="editDialog" :dialogData="rowData"/>
         <!-- <add-dialog :visible.sync="visible"/> -->
     </div>
@@ -94,6 +94,7 @@ export default {
         },
         rank () {
             this.showRank = true
+            this.$refs.header.queryBanner()
         },
         edit (val) {
             this.rowData = val
