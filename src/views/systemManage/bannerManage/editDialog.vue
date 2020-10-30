@@ -14,21 +14,17 @@
                 <el-input v-model="form.about"  type="textarea" :rows="4"/>
             </el-form-item>
             <el-form-item label="封面：" :label-width="formLabelWidth" required>
-                <!-- <el-input v-model="form.img"/> -->
-                <el-upload
-                    class="avatar-uploader"
-                    action="http://127.0.0.1:8888/se/src/main/upload"
-                    :show-file-list="false"
-                    :on-success="successed"
-                >
-                    <img :src="form.img" class="avatar">
-                    <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
-                </el-upload>
+                <input type="file" accept="image/*" @change="uploadImg()" class="imgUpload"/>
+                <el-image
+                    style="width: 300px; height: 170px"
+                    :src="form.img"
+                    fit="contain"
+                />
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="editVisible = false">取 消</el-button>
-            <el-button type="primary" @click="editVisible = false">确 定</el-button>
+            <el-button type="primary" @click="submit">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -39,7 +35,8 @@ export default {
         return {
             editVisible: false,
             form: {},
-            formLabelWidth: '80px'
+            formLabelWidth: '80px',
+            imgUrl: ''
         }
     },
     props: {
@@ -64,55 +61,55 @@ export default {
                 done()
             }).catch(_ => {})
         },
-        successed (e) {
-            // let file = e.target.files[0]
-            // if (file) {
-            //     let name = e.target.files[0].name
-            //     let reader = new FileReader()
-            //     reader.onload = function (event) {
-            //         let base64 = event.target.result
-            //         let base64Data = base64.replace(/^data:image\/\w+;base64,/, '')
-            //         console.log('base64Data', base64Data)
-            //         this.$axios.post('/src/main/upload', {
-            //             name,
-            //             file: base64Data
-            //         }).then(res => {
-            //             console.log('url', res.data.result.url)
-            //             let url = res.data.result.url
-            //             this.form.img = url
-            //             // console.log(urlInput.value);
-            //         })
-            //     }
-            //     reader.readAsDataURL(file) // 将 Blob 或 File 对象转成base64
-            // }
+        uploadImg () {
+            let img = document.querySelector('.imgUpload')
+            // console.log(img)
+            // console.log(img.files)
+            // console.log(this.fileList)
+            // let file = event.target.files[0]
+            let file = img.files[0]
+            // let file = this.fileList[0]
+            // console.log(file)
+            if (file) {
+                // let name = event.target.files[0].name
+                let name = file.name
+                let reader = new FileReader()
+                reader.onload = (event) => {
+                    let base64 = event.target.result
+                    let base64Data = base64.replace(/^data:image\/\w+;base64,/, '')
+                    // console.log('base64Data', base64Data)
+                    this.$axios.post('/src/main/upload', {
+                        name,
+                        file: base64Data
+                    }).then(res => {
+                        // console.log('url', res.data.result.url)
+                        let url = res.data.result.url
+                        this.form.img = url
+                    })
+                }
+                reader.readAsDataURL(file) // 将 Blob 或 File 对象转成base64
+            }
+        },
+        submit () {
+            let params = {
+                title: this.form.title,
+                about: this.form.about,
+                img: this.form.img,
+                bid: this.form.bid
+            }
+            this.$axios.post('/updateBanner', params).then(res => {
+                console.log(res)
+                if (res.status === 200) {
+                    this.$message.success('修改成功！')
+                    this.$parent.queryBanner()
+                    this.editVisible = false
+                }
+            }).catch(error => {
+                console.error(error.message)
+            })
         }
     }
 }
 </script>
 <style lang="less" scoped>
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 360px;
-    height: 200px;
-    line-height: 200px;
-    text-align: center;
-}
-.avatar {
-    width: 300px;
-    height: 170px;
-    display: block;
-    border-radius: 5px;
-    border: 1px dashed #8c939d;
-}
 </style>

@@ -15,18 +15,17 @@
                 <el-input v-model="form.about"  type="textarea" :rows="4"/>
             </el-form-item>
             <el-form-item label="封面：" :label-width="formLabelWidth" required>
-                <input type="file" accept="image/*" @change="uploadImg()" :fileList="fileList" class="imgUpload"/>
+                <input type="file" accept="image/*" @change="uploadImg()" class="imgUpload"/>
                 <el-image
                     style="width: 300px; height: 170px"
                     :src="imgUrl"
                     fit="contain"
-                >
-                </el-image>
+                />
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="addVisible = false">取 消</el-button>
-            <el-button type="primary" @click="sumbit">确 定</el-button>
+            <el-button type="primary" @click="submit">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -88,7 +87,7 @@ export default {
                 reader.readAsDataURL(file) // 将 Blob 或 File 对象转成base64
             }
         },
-        sumbit () {
+        submit () {
             let params = {
                 title: this.form.title,
                 about: this.form.about,

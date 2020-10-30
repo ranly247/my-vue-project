@@ -2,6 +2,7 @@
     <div>
         <el-row>
             <el-button type="primary" icon="el-icon-plus" @click="add">增加</el-button>
+            <el-button type="primary" icon="el-icon-top" @click="rank">排序</el-button>
             <el-input v-model="input" placeholder="请输入标题" clearable/>
             <el-button type="success" icon="el-icon-search" @click="queryBanner">搜索</el-button>
         </el-row>
@@ -46,6 +47,7 @@
             </el-table-column>
         </el-table>
         <add-dialog :show.sync="show"/>
+        <rank-dialog :show.sync="showRank"/>
         <edit-dialog v-model="editDialog" :dialogData="rowData"/>
         <!-- <add-dialog :visible.sync="visible"/> -->
     </div>
@@ -54,11 +56,13 @@
 <script>
 import addDialog from './addDialog'
 import editDialog from './editDialog'
+import rankDialog from './rankDialog'
 export default {
     name: 'banner',
     components: {
         addDialog,
-        editDialog
+        editDialog,
+        rankDialog
     },
     data () {
         return {
@@ -66,6 +70,7 @@ export default {
             tableData: [],
             tableLoading: true,
             show: false,
+            showRank: false,
             editDialog: false,
             rowData: []
             // visible: false
@@ -86,6 +91,9 @@ export default {
         },
         add () {
             this.show = true
+        },
+        rank () {
+            this.showRank = true
         },
         edit (val) {
             this.rowData = val
@@ -126,6 +134,8 @@ export default {
     },
     created () {
         this.queryBanner()
+        this.$tFn.obj.fn(this.show)
+        console.log(this.$tFn.obj.a)
     }
 }
 </script>
