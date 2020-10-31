@@ -4,7 +4,7 @@
             <el-button type="primary" icon="el-icon-plus" @click="add">增加</el-button>
             <!-- <el-button type="primary" icon="el-icon-top" @click="rank">排序</el-button> -->
             <el-input v-model="input" placeholder="请输入标题" clearable/>
-            <el-button type="success" icon="el-icon-search" @click="queryNews">搜索</el-button>
+            <el-button type="success" icon="el-icon-search" @click="querySale">搜索</el-button>
         </el-row>
         <el-table
             :data="tableData"
@@ -19,14 +19,14 @@
                 style="display:none"
             /> -->
             <el-table-column prop="title" label="标题" width="180" align="center"/>
-            <el-table-column prop="newsType" label="类型" width="100" align="center" class="longText">
+            <el-table-column prop="shoppingType" label="类型" width="100" align="center" class="longText">
                 <template slot-scope="scope">
                     <el-tag
                         effect="dark"
                         disable-transitionsr
-                        :type="scope.row.newsType === 1 ? 'danger' :(scope.row.newsType === 2 ? 'info' : (scope.row.newsType === 3 ? 'success' : ''))"
+                        :type="scope.row.shoppingType === 1 ? 'danger' :(scope.row.shoppingType === 2 ? 'info' : 'success')"
                     >
-                        {{scope.row.newsType === 1 ? '游戏' :(scope.row.newsType === 2 ? '其他' : (scope.row.newsType === 3 ? '杂志' : '唱片'))}}
+                        {{scope.row.shoppingType === 1 ? '游戏' :(scope.row.shoppingType === 2 ? '其他' : '杂志')}}
                     </el-tag>
                 </template>
             </el-table-column>
@@ -35,13 +35,8 @@
                     <img :src="scope.row.img" width="100%" height="100%" class="img"/>
                 </template>
             </el-table-column>
-            <el-table-column label="新闻内容" width="120" align="center">
-                <template slot-scope="scope">
-                    <el-button type="primary" icon="el-icon-more" size="mini" @click="more(scope.row)">more</el-button>
-                    <!-- <el-button type="text" @click="del(scope.row)">删除</el-button> -->
-                </template>
-            </el-table-column>
-            <el-table-column label="日期" width="150" align="center" prop="publishDay"/>
+            <el-table-column label="价格/日元" width="150" align="center" prop="price"/>
+            <el-table-column label="上架时间" width="150" align="center" prop="publishDay"/>
             <el-table-column label="操作" max-width=150 align="center">
                 <template slot-scope="scope">
                     <el-button type="text" @click="edit(scope.row)">修改</el-button>
@@ -52,43 +47,41 @@
         <add-dialog :show.sync="show"/>
         <!-- <rank-dialog :show.sync="showRank" ref="header"/> -->
         <edit-dialog v-model="editDialog" :dialogData="rowData"/>
-        <more-dialog v-model="moreDialog" :dialogData="rowData"/>
-        <!-- <add-dialog :visible.sync="visible"/> -->
+        <!-- <more-dialog v-model="moreDialog" :dialogData="rowData"/> -->
     </div>
 </template>
 
 <script>
 import addDialog from './addDialog'
 import editDialog from './editDialog'
-import moreDialog from './moreDialog'
+// import moreDialog from './moreDialog'
 export default {
-    name: 'news',
+    name: 'sale',
     components: {
         addDialog,
-        editDialog,
-        moreDialog
+        editDialog
+        // moreDialog
     },
     data () {
         return {
             input: '',
             tableData: [],
-            date: '',
+            // date: '',
             tableLoading: true,
             show: false,
             // showRank: false,
             editDialog: false,
-            moreDialog: false,
+            // moreDialog: false,
             rowData: []
-            // visible: false
         }
     },
     methods: {
-        queryNews () {
+        querySale () {
             this.tableLoading = true
             let params = {
                 title: this.input || ''
             }
-            this.$axios.get('/src/main/queryNews', {params}).then(res => {
+            this.$axios.get('/src/main/querySale', {params}).then(res => {
                 this.tableLoading = false
                 // this.date = res.data.publishDay.ToString('yyyy-MM-dd')
                 this.tableData = res.data
@@ -100,8 +93,8 @@ export default {
             this.show = true
         },
         more (val) {
-            this.rowData = val
-            this.moreDialog = true
+            // this.rowData = val
+            // this.moreDialog = true
         },
         edit (val) {
             this.rowData = val
@@ -110,13 +103,13 @@ export default {
         del (row) {
             this.$confirm(`${row.title}`, '确认删除?', {center: true}).then(_ => {
                 let params = {
-                    nid: row.nid
+                    ssid: row.ssid
                 }
-                this.$axios.post('/delNews', params).then(res => {
+                this.$axios.post('/delSale', params).then(res => {
                     console.log(res)
                     if (res.status === 200) {
                         this.$message.success('已删除')
-                        this.queryNews()
+                        this.querySale()
                     }
                 }).catch(error => {
                     console.error(error.message)
@@ -148,7 +141,7 @@ export default {
     //     }
     },
     created () {
-        this.queryNews()
+        this.querySale()
     }
 }
 </script>

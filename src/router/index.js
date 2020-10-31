@@ -6,6 +6,7 @@ import Axios from '@/views/test/axios'
 import Banner from '@/views/systemManage/bannerManage/banner'
 import News from '@/views/systemManage/newsManage/news'
 import Layout from '@/views/layout/layout'
+import Sale from '@/views/systemManage/saleManage/sale'
 
 Vue.use(Router)
 
@@ -42,6 +43,14 @@ export default new Router({
                 meta: {
                     preTitle: '新闻管理',
                     title: 'quick news'
+                }
+            }, {
+                path: '/sale',
+                name: 'sale',
+                component: Sale,
+                meta: {
+                    preTitle: '商品管理',
+                    title: 'sale'
                 }
             }]
         }

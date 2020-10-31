@@ -8,7 +8,7 @@
     >
         <el-form :model="form">
             <el-form-item label="标题：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.title"/>
+                <el-input v-model="form.title" disabled/>
             </el-form-item>
             <el-form-item label="新闻内容：" :label-width="formLabelWidth" required>
                 <!--  富文本编辑器 -->

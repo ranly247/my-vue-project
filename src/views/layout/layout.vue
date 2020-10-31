@@ -85,7 +85,7 @@ export default {
                     menuIcon: 'el-icon-location-information',
                     menuId: 1,
                     menuName: 'banner管理',
-                    menuPath: 'b',
+                    menuPath: 'a',
                     menuRemark: '',
                     parentMenuId: 0
                 },
@@ -105,6 +105,26 @@ export default {
                     menuIcon: 'el-icon-news',
                     menuId: 22,
                     menuName: '新闻管理',
+                    menuPath: 'b',
+                    menuRemark: '',
+                    parentMenuId: 0
+                },
+                {
+                    children: [
+                        {
+                            disabled: false,
+                            menuIcon: '',
+                            menuId: 3333,
+                            menuName: 'sale',
+                            menuPath: 'sale',
+                            menuRemark: '“我是备注”',
+                            parentMenuId: 333
+                        }
+                    ],
+                    disabled: false,
+                    menuIcon: 'el-icon-shopping-bag-1',
+                    menuId: 333,
+                    menuName: '商品管理',
                     menuPath: 'c',
                     menuRemark: '',
                     parentMenuId: 0
