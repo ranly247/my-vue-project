@@ -29,6 +29,7 @@
                 />
             </el-form-item>
             <el-form-item label="新闻内容：" :label-width="formLabelWidth" required>
+                <!-- 富文本编辑器 -->
                 <rich-text-editor v-model="form.about"/>
             </el-form-item>
             <el-form-item label="发布日期：" :label-width="formLabelWidth" required>

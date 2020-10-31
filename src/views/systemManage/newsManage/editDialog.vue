@@ -26,9 +26,6 @@
                     fit="contain"
                 />
             </el-form-item>
-            <el-form-item label="新闻内容：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.about"/>
-            </el-form-item>
             <el-form-item label="发布日期：" :label-width="formLabelWidth" required>
                 <div class="block">
                     <el-date-picker
@@ -132,7 +129,6 @@ export default {
                 title: this.form.title,
                 newsType: this.form.newsType,
                 img: this.form.img,
-                about: this.form.about,
                 publishDay: this.form.publishDay,
                 nid: this.form.nid
             }

@@ -2,7 +2,7 @@
     <el-dialog
         title="修改新闻内容"
         :visible.sync="editVisible"
-        width="30%"
+        width="40%"
         :before-close="handleClose"
         center
     >
@@ -11,7 +11,8 @@
                 <el-input v-model="form.title"/>
             </el-form-item>
             <el-form-item label="新闻内容：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.about"/>
+                <!--  富文本编辑器 -->
+                <rich-text-editor v-model="form.about"/>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -22,7 +23,11 @@
 </template>
 
 <script>
+import richTextEditor from './richTextEditor'
 export default {
+    components: {
+        richTextEditor
+    },
     data () {
         return {
             editVisible: false,

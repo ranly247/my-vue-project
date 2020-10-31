@@ -53,15 +53,15 @@ export default {
     methods: {
         seteditor () {
             this.editor = new E(this.$refs.toolbar, this.$refs.editor)
-            // this.editor.customConfig.uploadImgShowBase64 = false // base 64 存储图片
-            // this.editor.customConfig.uploadImgServer = 'http://192.168.9.78:8886/oms/upLoadInfo/uploadFile'// 配置服务器端地址
-            // this.editor.customConfig.uploadImgHeaders = { }// 自定义 header
-            // this.editor.customConfig.uploadFileName = 'file' // 后端接受上传文件的参数名
-            // this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为 2M
-            // this.editor.customConfig.uploadImgMaxLength = 6 // 限制一次最多上传 3 张图片
-            // this.editor.customConfig.uploadImgTimeout = 3 * 60 * 1000 // 设置超时时间
+            this.editor.config.uploadImgShowBase64 = false // base 64 存储图片
+            this.editor.config.uploadImgServer = 'http://192.168.9.78:8886/oms/upLoadInfo/uploadFile'// 配置服务器端地址
+            this.editor.config.uploadImgHeaders = { }// 自定义 header
+            this.editor.config.uploadFileName = 'file' // 后端接受上传文件的参数名
+            this.editor.config.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为 2M
+            this.editor.config.uploadImgMaxLength = 6 // 限制一次最多上传 3 张图片
+            this.editor.config.uploadImgTimeout = 3 * 60 * 1000 // 设置超时时间
             // 配置菜单
-            this.editor.customConfig.menus = [
+            this.editor.config.menus = [
                 'head', // 标题
                 'bold', // 粗体
                 'fontSize', // 字号
@@ -76,10 +76,10 @@ export default {
                 'quote', // 引用
                 'emoticon', // 表情
                 'image', // 插入图片
-                'video', // 插入视频
+                // 'video', // 插入视频
                 'undo' // 撤销
             ]
-            this.editor.customConfig.uploadImgHooks = {
+            this.editor.config.uploadImgHooks = {
                 fail: (xhr, editor, result) => {
                 // 插入图片失败回调
                 },
@@ -105,7 +105,7 @@ export default {
                     // }
                 }
             }
-            this.editor.customConfig.onchange = (html) => {
+            this.editor.config.onchange = (html) => {
                 this.info_ = html // 绑定当前逐渐地值
                 this.$emit('change', this.info_) // 将内容同步到父组件中
             }
