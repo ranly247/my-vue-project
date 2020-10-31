@@ -7,6 +7,7 @@ import axios from 'axios'
 import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import imgApi from './utils/imgUpload.js'
+import formatDate from './utils/formateDate.js'
 import tFn from './views/test/test.js'
 
 Vue.use(ElementUi)
@@ -18,6 +19,8 @@ axios.defaults.baseURL = '/api'
 Vue.config.productionTip = false
 
 Vue.prototype.$imgApi = imgApi
+
+Vue.prototype.$fd = formatDate
 
 Vue.prototype.$tFn = tFn
 

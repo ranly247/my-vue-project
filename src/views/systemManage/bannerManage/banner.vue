@@ -19,7 +19,7 @@
                 style="display:none"
             /> -->
             <el-table-column prop="title" label="标题" width="180" header-align="center"/>
-            <el-table-column prop="about" label="介绍" width="600" header-align="center" class="longText"/>
+            <el-table-column prop="about" label="介绍" width="450" header-align="center" class="longText"/>
             <el-table-column label="封面" width="200" header-align="center">
                 <template slot-scope="scope">
                     <img :src="scope.row.img" width="100%" height="100%" class="img"/>

@@ -41,7 +41,8 @@
                     <!-- <el-button type="text" @click="del(scope.row)">删除</el-button> -->
                 </template>
             </el-table-column>
-            <el-table-column label="日期" width="150" align="center" prop="publishDay"/>
+            <el-table-column label="日期" width="150" align="center" prop="publishDay">
+            </el-table-column>
             <el-table-column label="操作" max-width=150 align="center">
                 <template slot-scope="scope">
                     <el-button type="text" @click="edit(scope.row)">修改</el-button>
@@ -90,8 +91,10 @@ export default {
             }
             this.$axios.get('/src/main/queryNews', {params}).then(res => {
                 this.tableLoading = false
-                // this.date = res.data.publishDay.ToString('yyyy-MM-dd')
                 this.tableData = res.data
+                this.tableData.forEach((e, index) => {
+                    this.tableData[index].publishDay = this.$fd.formateDate(this.tableData[index].publishDay)
+                })
             }).catch(err => {
                 console.log(err)
             })
@@ -113,7 +116,6 @@ export default {
                     nid: row.nid
                 }
                 this.$axios.post('/delNews', params).then(res => {
-                    console.log(res)
                     if (res.status === 200) {
                         this.$message.success('已删除')
                         this.queryNews()
@@ -123,29 +125,6 @@ export default {
                 })
             }).catch(_ => {})
         }
-    //     changeShow (row) {
-    //         let sort = ''
-    //         if (row.isshow === 0) {
-    //             sort = 0
-    //         } else {
-    //             sort = 1
-    //         }
-    //         let params = {
-    //             bid: row.bid,
-    //             isshow: row.isshow,
-    //             sort: sort
-    //         }
-    //         this.$axios.post('/changeShow', params).then(res => {
-    //             console.log(res)
-    //             if (res.status === 200) {
-    //                 row.isshow === 0 ? this.$message.error('已在首页中移除') : this.$message.success('已在首页中展示')
-    //                 // this.$message.success(`${row.isshow === 0 ? '已在首页中移除' : '已在首页中展示'}`)
-    //                 this.queryBanner()
-    //             }
-    //         }).catch(error => {
-    //             console.error(error.message)
-    //         })
-    //     }
     },
     created () {
         this.queryNews()
