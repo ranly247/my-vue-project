@@ -117,9 +117,16 @@ export default {
             }).catch(_ => {})
         },
         changeShow (row) {
+            let sort = ''
+            if (row.isshow === 0) {
+                sort = 0
+            } else {
+                sort = 1
+            }
             let params = {
                 bid: row.bid,
-                isshow: row.isshow
+                isshow: row.isshow,
+                sort: sort
             }
             this.$axios.post('/changeShow', params).then(res => {
                 console.log(res)
