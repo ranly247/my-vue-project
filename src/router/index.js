@@ -7,6 +7,7 @@ import Banner from '@/views/systemManage/bannerManage/banner'
 import News from '@/views/systemManage/newsManage/news'
 import Layout from '@/views/layout/layout'
 import Sale from '@/views/systemManage/saleManage/sale'
+import Estore from '@/views/systemManage/eStoreManage/estore'
 
 Vue.use(Router)
 
@@ -51,6 +52,14 @@ export default new Router({
                 meta: {
                     preTitle: '商品管理',
                     title: 'sale'
+                }
+            }, {
+                path: '/estore',
+                name: 'estore',
+                component: Estore,
+                meta: {
+                    preTitle: '商品管理',
+                    title: 'estore'
                 }
             }]
         }

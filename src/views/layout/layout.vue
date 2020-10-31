@@ -119,6 +119,15 @@ export default {
                             menuPath: 'sale',
                             menuRemark: '“我是备注”',
                             parentMenuId: 333
+                        },
+                        {
+                            disabled: false,
+                            menuIcon: '',
+                            menuId: 33333,
+                            menuName: 'estore',
+                            menuPath: 'estore',
+                            menuRemark: '“我是备注”',
+                            parentMenuId: 333
                         }
                     ],
                     disabled: false,
