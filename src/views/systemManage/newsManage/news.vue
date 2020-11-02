@@ -89,12 +89,17 @@ export default {
             let params = {
                 title: this.input || ''
             }
-            this.$axios.get('/src/main/queryNews', {params}).then(res => {
-                this.tableLoading = false
-                this.tableData = res.data
-                this.tableData.forEach((e, index) => {
-                    this.tableData[index].publishDay = this.$fd.formateDate(this.tableData[index].publishDay)
-                })
+            this.$axios.get('/queryNews', {params}).then(res => {
+                if (res.data === 404) {
+                    this.$message.error(this.$error)
+                    this.$router.push(this.$login)
+                } else {
+                    this.tableLoading = false
+                    this.tableData = res.data
+                    this.tableData.forEach((e, index) => {
+                        this.tableData[index].publishDay = this.$fd.formateDate(this.tableData[index].publishDay)
+                    })
+                }
             }).catch(err => {
                 console.log(err)
             })

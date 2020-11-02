@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+// import HelloWorld from '@/components/HelloWorld'
 import Login from '@/views/login/login'
 import Axios from '@/views/test/axios'
 import Banner from '@/views/systemManage/bannerManage/banner'
@@ -8,16 +8,13 @@ import News from '@/views/systemManage/newsManage/news'
 import Layout from '@/views/layout/layout'
 import Sale from '@/views/systemManage/saleManage/sale'
 import Estore from '@/views/systemManage/eStoreManage/estore'
+import Welcome from '@/views/welcome/welcome'
 
 Vue.use(Router)
 
 export default new Router({
     routes: [
         {
-            path: '/',
-            name: 'HelloWorld',
-            component: HelloWorld
-        }, {
             path: '/login',
             name: 'login',
             component: Login
@@ -26,7 +23,7 @@ export default new Router({
             name: 'axios',
             component: Axios
         }, {
-            path: '/layout',
+            path: '/',
             name: 'layout',
             component: Layout,
             children: [{
@@ -61,6 +58,10 @@ export default new Router({
                     preTitle: '商品管理',
                     title: 'estore'
                 }
+            }, {
+                path: '/welcome',
+                name: 'welcome',
+                component: Welcome
             }]
         }
     ]

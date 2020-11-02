@@ -82,9 +82,14 @@ export default {
             let params = {
                 title: this.input || ''
             }
-            this.$axios.get('/src/main/queryBanner', {params}).then(res => {
-                this.tableLoading = false
-                this.tableData = res.data
+            this.$axios.get('/queryBanner', {params}).then(res => {
+                if (res.data === 404) {
+                    this.$message.error(this.$error)
+                    this.$router.push(this.$login)
+                } else {
+                    this.tableLoading = false
+                    this.tableData = res.data
+                }
             }).catch(err => {
                 console.log(err)
             })
@@ -142,8 +147,6 @@ export default {
     },
     created () {
         this.queryBanner()
-        this.$tFn.obj.fn(this.show)
-        console.log(this.$tFn.obj.a)
     }
 }
 </script>

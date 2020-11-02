@@ -96,7 +96,10 @@ export default {
             }
             this.$axios.post('/addBanner', params).then(res => {
                 console.log(res)
-                if (res.status === 200) {
+                if (res.data === 404) {
+                    this.$message.error(this.$error)
+                    this.$router.push(this.$login)
+                } else if (res.status === 200) {
                     this.$message.success('添加成功！')
                     this.$parent.queryBanner()
                     this.addVisible = false

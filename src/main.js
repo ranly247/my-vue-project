@@ -8,7 +8,6 @@ import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import imgApi from './utils/imgUpload.js'
 import formatDate from './utils/formateDate.js'
-import tFn from './views/test/test.js'
 
 Vue.use(ElementUi)
 
@@ -22,7 +21,18 @@ Vue.prototype.$imgApi = imgApi
 
 Vue.prototype.$fd = formatDate
 
-Vue.prototype.$tFn = tFn
+axios.defaults.withCredentials = true
+
+Vue.prototype.$manageInfo = {
+    name: 'squareEnix官网'
+}
+// cookie失效，路由跳转的登录页面
+Vue.prototype.$login = {
+    path: '/login',
+    name: 'login'
+}
+// 跳转登录页面提示信息
+Vue.prototype.$error = '登录信息失效，请重新登录'
 
 /* eslint-disable no-new */
 new Vue({

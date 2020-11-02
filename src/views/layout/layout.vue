@@ -1,7 +1,7 @@
 <template>
     <el-container class="layoutPage">
         <el-header class="layoutHeader" height="48px">
-            <label class="titleName">squareEnix</label>
+            <label class="titleName">{{ $manageInfo.name }}</label>
             <label class="name">ranly</label>
             <!-- <img @click="handleSignOut" class="signoutImg" src="@/assets/images/icon_signout.png" alt="退出"> -->
         </el-header>
@@ -28,6 +28,10 @@
                     background-color="#37363b"
                     active-text-color="#ff9234"
                     :default-active="$route.name">
+                    <el-menu-item index="welcome">
+                        <i class="el-icon-location-outline"></i>
+                        <span slot="title">首页在这呢！</span>
+                    </el-menu-item>
                     <template v-for="item in menus">
                         <!--左侧导航条-->
                         <el-submenu v-if="item.children.length > 0" :key="item.menuId" :index="item.menuPath" unique-opened="true">
