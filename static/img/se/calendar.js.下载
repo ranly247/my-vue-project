@@ -1,0 +1,57 @@
+/**
+ * 公開終了判定
+ *
+ * @param formattedPreferredEndDate
+ * @returns {boolean}
+ */
+var isCalendarPreferredEnd = function (formattedPreferredEndDate) {
+    if (formattedPreferredEndDate) {
+        var currentDate = new Date($("#js-current-date").val());
+        var preferredEndDate = new Date(formattedPreferredEndDate);
+        if (currentDate && currentDate > preferredEndDate) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * リンクURL取得
+ * @param linkUrl
+ * @returns {string}
+ */
+var getCalendarLinkUrl = function (linkUrl) {
+    if (linkUrl) {
+        return linkUrl;
+    } else {
+        return "javascript:void(0)";
+    }
+};
+
+/**
+ * 別タブで開くかどうか取得（1:なし、2:_blankあり）
+ * @param target
+ * @returns {string}
+ */
+var getCalendarTarget = function (target) {
+    if (target === 2) {
+        return "_blank";
+    } else {
+        return "";
+    }
+};
+
+/**
+ * 画像取得
+ *
+ * @param imageUrl
+ * @returns {string}
+ */
+var getCalendarImageUrl = function (imageUrl) {
+    if (imageUrl) {
+        return imageUrl;
+    } else {
+        // NO IMAGE画像
+        return "/contents/common/img/noimage.jpg";
+    }
+};

@@ -1,0 +1,104 @@
+
+
+$( function () {
+	// ウィンドウ
+	var $win = $( window );
+	// PC用メニュー
+	var $largeMenu = $( ".sqex-large-menu" );
+	// スマホ用メニュー
+	var $smallMenu = $( "#sqex-small-menu" );
+	// スマホメニュー用オーバーレイ
+	var $smallMenuOverlay = $( "#sqex-small-menu-overlay" );
+	// スマホ用メニュー開閉ボタン
+	var $smallMenuButton = $( "#sqex-small-menu-button" ).menuButton();
+	// フッタ開閉メニュー
+	var $footer = $( "footer" ).footer();
+	// 「特約書店様へ」リンク
+	var $magazinBusiness = $( ".sqex-footer-menu-sub .magazin-business" );
+
+	// PCメニューアクティブ切り替えの初期化
+	$largeMenu.menuActivitySwitcher( {
+		urlData: {
+			game: [ "jp.square-enix.com/game" ],
+			books: [ "magazine.jp.square-enix.com", "jp.square-enix.com/magazine", "jp.square-enix.com/anime" ],
+			music: [ "soundtrack.jp.square-enix.com", "jp.square-enix.com/music" ],
+			goods: [ "square-enix-shop.com/jp", "jp.square-enix.com/goods" ]
+		}
+	} );
+
+	// スマホメニューオーバーレイの初期化
+	$smallMenuOverlay.menuOverlay().hammer().on( "tap", function () {
+		$smallMenu.menu( "close" );
+	} );
+
+	// メニュー開閉ボタンの初期化
+	$smallMenuButton.on( "click", function ( evt ) {
+		// クリック時の動作を無効にする
+		evt.preventDefault();
+	} )
+	.hammer().on( "tap", function () {// タップ
+		if ( $smallMenu.menu( "isEnabled" ) === false ) {
+			return;
+		}
+		switch ( $smallMenu.menu( "getStatus" ) ) {
+			case 1:// 開き状態
+				// メニュー開く
+				$smallMenu.menu( "close" );
+			break;
+			case 3:// 閉じ状態
+				// メニュー閉じる
+				$smallMenu.menu( "open" );
+			break;
+		}
+	} );
+
+	// スマホメニューの初期化
+	$smallMenu.menu( {
+		// 開く処理開始
+		open: function () {
+			// ボタンを表示状態に
+			$smallMenuButton.menuButton( "open" );
+			// オーバーレイの表示
+			$smallMenuOverlay.menuOverlay( "open" );
+		},
+		// 閉じる処理開始
+		cleanup: function () {
+			// ボタンを閉じ状態に
+			$smallMenuButton.menuButton( "close" );
+			// オーバーレイ隠す
+			$smallMenuOverlay.menuOverlay( "close" );
+		},
+		// すぐに消す場合
+		vanish: function () {
+			$smallMenuOverlay.menuOverlay( "vanish" );
+			$smallMenuButton.menuButton( "vanish" );
+		}
+	} );
+
+	// メディアクエリー切り替えのハンドリング
+	$win.lemirue( "(max-width:767px)" ).on( "mediaquery", function ( evt ) {
+		$footer.footer( "isMobile", evt != 1 );
+		// PCサイズ
+		if ( evt === 1 ) {
+			// モバイル用メニューをすぐに消す
+			$smallMenu.menu( "vanish" );
+			// フッタメニュー表示のリセット
+			$footer.footer( "reset", "large" );
+		}
+		else {// モバイルサイズ
+			// モバイル用メニューを準備中に
+			$smallMenu.menu( "standby" );
+			// フッタメニュー表示のリセット
+			$footer.footer( "reset", "small" );
+		}
+	} );
+
+	// 「特約書店様へ」リンク表示
+	$magazinBusiness.magazinBusiness( {
+		urlData: [
+			"jp.square-enix.com/magazine",
+			"magazine.jp.square-enix.com"
+		]
+	} );
+
+} );

@@ -1,0 +1,185 @@
+@charset "UTF-8";
+
+/* ============================================================ */
+/* 通常状態 */
+/* ============================================================ */
+.sqex-small-menu-button.closed li:nth-of-type(1) {
+	-webkit-animation: menu-bar01 .4s forwards;
+	animation: menu-bar01 .4s forwards;
+}
+
+.sqex-small-menu-button.closed li:nth-of-type(2) {
+	-webkit-animation: menu-bar02 .4s forwards;
+	animation: menu-bar02 .4s forwards;
+}
+.sqex-small-menu-button.closed li:nth-of-type(3) {
+	-webkit-animation: menu-bar03 .4s forwards;
+	animation: menu-bar03 .4s forwards;
+}
+
+@-webkit-keyframes menu-bar01 {
+	0% {
+		transform: translateY(6px) rotate(45deg);
+	}
+	25% {
+		transform: translateY(12px) rotate(20deg);
+	}
+	75% {
+		transform: translateY(12px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+@keyframes menu-bar01 {
+	0% {
+		transform: translateY(6px) rotate(45deg);
+	}
+	25% {
+		transform: translateY(12px) rotate(20deg);
+	}
+	50% {
+		transform: translateY(12px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@-webkit-keyframes menu-bar02 {
+	0% {
+		transform: translateY(6px) rotate(-45deg);
+	}
+	25% {
+		transform: translateY(6px) rotate(-20deg);
+	}
+	50% {
+		transform: translateY(6px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+@keyframes menu-bar02 {
+	0% {
+		transform: translateY(6px) rotate(-45deg);
+	}
+	25% {
+		transform: translateY(6px) rotate(-20deg);
+	}
+	50% {
+		transform: translateY(6px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@-webkit-keyframes menu-bar03 {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1.0;
+	}
+}
+@keyframes menu-bar03 {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1.0;
+	}
+}
+
+/* ============================================================ */
+/* アクティブ状態 */
+/* ============================================================ */
+.sqex-small-menu-button.open li:nth-of-type(1) {
+	-webkit-animation: active-menu-bar01 .4s forwards;
+	animation: active-menu-bar01 .4s forwards;
+}
+
+.sqex-small-menu-button.open li:nth-of-type(2) {
+	-webkit-animation: active-menu-bar02 .4s forwards;
+	animation: active-menu-bar02 .4s forwards;
+}
+
+.sqex-small-menu-button.open li:nth-of-type(3) {
+	-webkit-animation: active-menu-bar03 .4s forwards;
+	animation: active-menu-bar03 .4s forwards;
+}
+
+@-webkit-keyframes active-menu-bar01 {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(12px);
+	}
+	75% {
+		transform: translateY(6px) rotate(20deg);
+	}
+	100% {
+		transform: translateY(6px) rotate(45deg);
+	}
+}
+@keyframes active-menu-bar01 {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(12px);
+	}
+	75% {
+		transform: translateY(6px) rotate(20deg);
+	}
+	100% {
+		transform: translateY(6px) rotate(45deg);
+	}
+}
+
+@-webkit-keyframes active-menu-bar02 {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(6px);
+	}
+	75% {
+		transform: translateY(0) rotate(-20deg);
+	}
+	100% {
+		transform: translateY(0) rotate(-45deg);
+	}
+}
+@keyframes active-menu-bar02 {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(6px);
+	}
+	75% {
+		transform: translateY(0) rotate(-20deg);
+	}
+	100% {
+		transform: translateY(0) rotate(-45deg);
+	}
+}
+
+@-webkit-keyframes active-menu-bar03 {
+	0% {
+	}
+	100% {
+		opacity: 0;
+	}
+}
+@keyframes active-menu-bar03 {
+	0% {
+	}
+	100% {
+		opacity: 0;
+	}
+}
+

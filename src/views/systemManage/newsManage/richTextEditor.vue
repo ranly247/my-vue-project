@@ -75,7 +75,7 @@ export default {
                 'justify', // 对齐方式
                 'quote', // 引用
                 'emoticon', // 表情
-                'image', // 插入图片
+                // 'image', // 插入图片
                 // 'video', // 插入视频
                 'undo' // 撤销
             ]

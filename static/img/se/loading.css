@@ -1,0 +1,63 @@
+@charset "UTF-8";
+/*--------------------------------------------
+
+追加CSS
+
+---------------------------------------------*/
+
+/**
+ ローディング
+ */
+#loading {
+  z-index:100000;
+  position:absolute;
+  left:0;
+  background:#fff;
+  height:5000px;
+  width:100%;
+  display: none;
+}
+.loading_pos {
+  width:100%;
+  text-align:center;
+  position:fixed;
+  top:50%;
+  margin-top:-30px;
+}
+
+#loading img {
+  display:inline;
+}
+#loading img.load {
+  width:40px;
+  -webkit-animation: spin 2s linear infinite;
+  -moz-animation: spin 2s linear infinite;
+  -ms-animation: spin 2s linear infinite;
+  -o-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {-webkit-transform: rotate(0deg);}
+  100% {-webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes spin {
+  0% {-moz-transform: rotate(0deg);}
+  100% {-moz-transform: rotate(360deg);}
+}
+@-ms-keyframes spin {
+  0% {-ms-transform: rotate(0deg);}
+  100% {-ms-transform: rotate(360deg);}
+}
+@-o-keyframes spin {
+  0% {-o-transform: rotate(0deg);}
+  100% {-o-transform: rotate(360deg);}
+}
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+.lst-news li .label-large {
+  width: 140px
+}

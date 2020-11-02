@@ -1,0 +1,239 @@
+// ローディング表示
+var loadingShow = function () {
+    $("#loading").show();
+};
+
+// データ存在チェック
+var isData = function (data) {
+    return !(data === "" || data === null || data === undefined || (Array.isArray(data) && data.length <= 0) || ($.isPlainObject(data) && $.isEmptyObject(data)));
+};
+
+// ローディング非表示
+var loadingHide = function () {
+    $("#loading").fadeOut(1500);
+};
+
+// jsonファイル読込
+var loadJson = function (file, callback) {
+    $.getJSON(file)
+        .done(function (json) {
+            callback(json);
+        })
+        .fail(function () {
+            callback(null);
+        });
+};
+
+// パラメタ関数
+var urlParam = (function () {
+    var urlParams = new Object;
+    var pair = location.search.substring(1).split('&');
+    for (var i = 0; pair[i]; i++) {
+        var kv = pair[i].split('=');
+        urlParams[kv[0]] = kv[1];
+    }
+    return {
+        get: function (key) {
+            return urlParams[key] != undefined ? decodeURIComponent(urlParams[key]) : "";
+        },
+        is: function (key) {
+            return urlParams[key] != undefined;
+        },
+        getBaseUrl: function () {
+            return location.protocol + "//" + location.host;
+        },
+        getCurrentUrl: function () {
+            return location.protocol + "//" + location.host + location.pathname
+        },
+        length: function(key){
+            if (key != undefined) {
+                if (urlParams[key] != undefined) {
+                    var urlParamsArray = urlParams[key].split(",");
+                    return urlParamsArray.length;
+                } else {
+                    return 0;
+                }
+            } else {
+                return Object.keys(urlParams).length;
+            }
+        }
+    };
+})();
+
+// オブジェクト存在判定
+var jsonDataHas = function (obj, key) {
+    if ((obj[key] != undefined) && !$.isEmptyObject(obj[key])) {
+        return true;
+    }
+    return false;
+};
+
+// 日付の年月日を[.]区切り取得
+var dateSeparateDot = function (date) {
+    if (date != undefined) {
+        if (date.length >= 10) {
+            return date.slice(0, 4) + "." + date.slice(5, 7) + "." + date.slice(8, 10);
+        } else if (date.length === 8) {
+            return date.slice(0, 4) + "." + date.slice(4, 6) + "." + date.slice(6, 8);
+        }
+    }
+    return date;
+};
+
+// 「年月日」付きで日付を取得
+var dateConvertJPYMD = function (date) {
+    if (date != undefined) {
+        if (date.length >= 10) {
+            return date.slice(0, 4) + "年" + date.slice(5, 7) + "月" + date.slice(8, 10) + "日";
+        } else if (date.length === 8) {
+            return date.slice(0, 4) + "年" + date.slice(4, 6) + "月" + date.slice(6, 8) + "日";
+        }
+    }
+    return date;
+};
+
+// 現在の日時をYYYYDDHHII形式で取得
+var getNowDateYYYYMMDDHHII = function () {
+    var nowDate = new Date();
+    var yyyy = nowDate.getFullYear();
+    var mm = towDoubleDigits(nowDate.getMonth() + 1);
+    var dd = towDoubleDigits(nowDate.getDate());
+    var hh = towDoubleDigits(nowDate.getHours());
+    var II = towDoubleDigits(nowDate.getMinutes());
+
+    return yyyy + "" + mm + "" + dd + "" + hh + "" + II
+};
+
+// 1桁の数字を0埋めで2桁にする
+var towDoubleDigits = function (num) {
+    num += "";
+    if (num.length === 1) {
+        num = "0" + num;
+    }
+    return num;
+};
+
+/**
+ * 終了日が引数の日時よりも前であることを確認
+ *
+ * @param {int}dateYYYYMMDDHHII
+ * @returns {boolean}
+ */
+var checkNowIsBeforeDate = function (dateYYYYMMDDHHII) {
+    var checkNowIsBeforeDate = false;
+    if (isData(dateYYYYMMDDHHII)) {
+        // 現在日時をYYYYMMDDHHII形式で取得
+        var nowDateYYYYMMDDHHII = getNowDateYYYYMMDDHHII();
+        if (dateYYYYMMDDHHII > nowDateYYYYMMDDHHII) {
+            checkNowIsBeforeDate = true;
+        }
+    }
+    return checkNowIsBeforeDate;
+};
+
+/**
+ * 引数で渡された日時が現在時刻を超えているか
+ *
+ * @param preferredEndDate
+ * @returns {boolean}
+ */
+var dateTimeExpired = function(preferredEndDate) {
+    var expired = true;
+    if (!isData(preferredEndDate) || checkNowIsBeforeDate(preferredEndDate)) {
+        // 日時なし or 現在日時より指定日が未来日付
+        expired = false
+    }
+    return expired;
+};
+
+/**
+ * 表示するデータであるか確認
+ *
+ * @param preferredEndDate
+ * @returns {boolean}
+ */
+var checkDisplayData = function (preferredEndDate) {
+    var checkDisplayDataFlag = false;
+    if (!isData(preferredEndDate)) {
+        // 公開期限が指定無しの場合表示
+        checkDisplayDataFlag = true;
+    } else if (checkNowIsBeforeDate(preferredEndDate) === true) {
+        // 公開期限が現在よりも前の場合表示
+        checkDisplayDataFlag = true;
+    }
+    return checkDisplayDataFlag;
+};
+
+// テンプレートHTML取得
+var getTemplateHtml = function (templateId) {
+    // テンプレート取得
+    var template = $("#" + templateId).clone();
+    if (template) {
+        template.removeAttr("id");
+        template.show();
+    }
+    return template
+};
+
+// SPレイアウト確認
+var isSpLayput = function () {
+    var w = $(window).width();
+    var x = 767;
+    // ブレイクポイント(SP)
+    if (w <= x) {
+        return true;
+        // ブレイクポイント(PC)
+    } else {
+        return false;
+    }
+};
+
+// 各種コンテンツ高さ調整
+var matchHeight = function () {
+    $('.js-matchHeight').matchHeight();
+    $('.js-matchHeight-dl').matchHeight();
+    $('.js-matchHeight-ttl').matchHeight();
+    $('.js-matchHeight-series').matchHeight();
+};
+
+// YouTubeプレイヤーロード
+var youTubeMovies = [];
+var loadYouTubePlayter = function () {
+    $.ajax({
+        url: "https://www.youtube.com/player_api/",
+        dataType: "script"
+    });
+};
+
+$(function () {
+
+    /* プレーヤーの準備完了時 */
+    window.onYouTubeIframeAPIReady = function () {
+        for (var key in youTubeMovies) {
+            new YT.Player(key, {videoId: youTubeMovies[key], playerVars: {rel: 0}});
+        }
+    };
+
+    var insertLoadingHtml = function () {
+        var insertLoadingHtml = '<div id="loading">' +
+            '<div class="loading_pos">' +
+            '<span class="loading-text">loading...</span><br>' +
+            '<img class="load" src="/contents/common/img/loading/loading_b.png">' +
+            '<noscript>' +
+            '<p>' +
+            'JavaScriptが無効になっていますのでご覧いただけません。&lt;br /&gt;' +
+            'このサイトのご利用にはJavaScriptが必須となっております。&lt;br /&gt;' +
+            '設定を有効にしてご覧ください。' +
+            '</p>' +
+            '</noscript>' +
+            '</div>' +
+            '</div>';
+        $("header").after(insertLoadingHtml);
+    };
+
+    insertLoadingHtml();
+
+    // テンプレートHTML非表示
+    $(".js-template").hide();
+
+});

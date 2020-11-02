@@ -1,0 +1,863 @@
+@charset "UTF-8";
+
+body {
+	margin: 0;
+	padding: 0;
+}
+header, footer {
+  font-family: Helvetica, Arial, Doroid Sans, "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", sans-serif;
+  /* font-size: 100%; */
+  font-size: 14px;
+  line-height: 1.125; }
+header table tr td, footer table tr td {
+  line-height: 1.75em; }
+
+/* ============================================================ */
+/* ヘッダフッタ共通 */
+/* ============================================================ */
+header div, footer div,
+header dl, footer dl,
+header dt, footer dt,
+header dd, footer dd,
+header ul, footer ul,
+header ol, footer ol,
+header li, footer li,
+header th, footer th,
+header td, footer td {
+	margin: 0;
+	padding: 0;
+}
+header ol, footer ol,
+header ul, footer ul {
+	list-style: none;
+}
+header ol:after, footer ol:after,
+header ul:after, footer ul:after,
+header dl:after, footer dl:after {
+	content: ""; 
+	display: block; 
+	clear: both;
+}
+header img, footer img {
+	border: 0;
+	vertical-align: middle;
+}
+header a, footer a {
+	outline: none;
+}
+header table, footer table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* PCサイズ */
+@media screen and (min-width: 768px) { 
+}
+/* スマホサイズ */
+@media screen and (max-width: 767px) {
+}
+
+/* ============================================================ */
+/* ヘッダ */
+/* ============================================================ */
+header {
+}
+	/* ===== スクエニヘッダ ===== */
+	.sqex-header {
+		position: relative;
+		margin-right: auto;
+		margin-left: auto;
+	}
+	/* ===== スクエニメニューエリア ===== */
+	.sqex-header-menu {
+		position: relative;
+	}
+
+/* ==================== PCサイズ共通 ==================== */
+@media screen and (min-width: 768px) {
+	header {
+		height: 100px;
+	}
+	/* ===== スクエニヘッダ ===== */
+	.sqex-header {
+		position: absolute;
+		z-index: 10000;
+		left: 0;
+		right: 0;
+		margin: auto;
+		overflow: hidden;
+		width: 100%;
+		height: 100px;
+		box-shadow: 0 0 5px rgba(0,0,0,0.5);
+	}
+	.sqex-header-main {
+		position: relative;
+		display: flex;
+		margin-right: auto;
+		margin-left: auto;
+		max-width: 1920px;
+	}
+		/* 1920以上に広げたときの帯 */
+		.sqex-header-main:before,
+		.sqex-header-main:after {
+			content: "";
+			display: block;
+			position: absolute;
+			width: 50%;
+			height: 100px;
+			background-color: #fff;
+		}
+		.sqex-header-main:before {
+			left: -50%;
+		}
+		.sqex-header-main:after {
+			right: -50%;
+		}
+	/* ===== スクエニロゴ ===== */
+	.sqex-header-logo {
+		width: 24%;
+		background-color: #fff;
+	}
+		.sqex-header-logo a {
+			display: flex;
+			align-items: center;
+			-webkit-align-items: center;
+			width: 100%;
+			height: 100px;
+		}
+			.sqex-header-logo a img {
+				margin-left: 10%;
+				width: 72%;
+			}
+	/* ===== PCサイズ用メニュー ===== */
+	.sqex-large-menu {
+		width: 76%;
+	}
+		/* ----- メニューボタン共通 ----- */
+		.sqex-large-menu-button {
+			position: relative;
+			display: block;
+		}
+			/* ボタン用ラベル */
+			.sqex-large-menu-button span {
+				display: block;
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				margin: auto;
+				font-size: 0;
+				background-repeat: no-repeat;
+				background-position: center top;
+			}
+			.sqex-large-menu-button:hover span {
+				background-position: center center;
+			}
+			.sqex-large-menu-button.active span {
+				background-position: center center;
+			}
+		/* ----- 上側メニュー ----- */
+		.sqex-large-menu-main:after,
+		.sqex-large-menu-sub:after {
+			content: "";
+			display: block;
+			clear: both;
+		}
+		.sqex-large-menu-main {
+			background-color: #fff;
+		}
+			/* 上側メニュー左 */
+			.sqex-large-menu-main-l {
+				display: flex;
+				float: left;
+			}
+			/* ----- 上側メニューボタン ----- */
+			.sqex-large-menu-main-l .sqex-large-menu-button {
+				height: 60px;
+			}
+			/* 上側メニュー右 */
+			.sqex-large-menu-main-r {
+				float: right;
+			}
+			/* ----- 検索エリア ----- */
+			.sqex-header-search {
+				display: flex;
+				align-items: center;
+				-webkit-align-items: center;
+				justify-content: center;
+				-webkit-justify-content: center;
+				height: 60px;
+			}
+				.sqex-header-search input {
+					padding-left: 35px;
+					height: 26px;
+					border: 1px solid #dedede;
+					border-radius: 2px;
+					background-color: #ededed;
+					background-image: url(../img/icon/search.png);
+					background-repeat: no-repeat;
+					background-position: 10px center;
+				}
+		/* ----- 下側メニュー ----- */
+		.sqex-large-menu-sub {
+			height: 40px;
+			background-color: rgba(255,255,255,0.75);
+		}
+			/* 下側メニュー左 */
+			.sqex-large-menu-sub-l {
+				display: flex;
+				float: left;
+			}
+			/* ----- 下側メニューボタン ----- */
+			.sqex-large-menu-sub .sqex-large-menu-button {
+				position: relative;
+				height: 40px;
+				background-color: #333;
+				transition: background-color .2s;
+			}
+				.sqex-large-menu-sub .sqex-large-menu-button:hover {
+					opacity: 1.0;
+					background-color: #c80000;
+				}
+				.sqex-large-menu-sub .sqex-large-menu-button.active {
+					opacity: 1.0;
+					background-color: #c80000;
+				}
+			/* ひし形ボタン用装飾 */
+			.sqex-l-diamond:before,
+			.sqex-r-diamond:after {
+				content: "";
+				display: block;
+				position: absolute;
+				top: 0;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				transition: border-color .2s;
+			}
+			.sqex-l-diamond:before {
+				left: -40px;
+				border-width: 0 0 40px 40px;
+				border-color: transparent transparent #333333 transparent;
+			}
+			.sqex-r-diamond:after {
+				right: -40px;
+				border-width: 40px 40px 0 0;
+				border-color: #333333 transparent transparent transparent;
+			}
+			/* ホバー時装飾 */
+			.sqex-l-diamond:hover:before,
+			.sqex-l-diamond.active:before {
+				border-color: transparent transparent #c80000 transparent;
+			}
+			.sqex-r-diamond:hover:after,
+			.sqex-r-diamond.active:after {
+				border-color: #c80000 transparent transparent transparent;
+			}
+			/* 下側メニュー右 */
+			.sqex-large-menu-sub-r {
+				display: flex;
+				float: right;
+			}
+	/* ===== スマホ用メニュー非表示処理 ===== */
+	.sqex-small-menu-button {
+		display: none;
+	}
+	.sqex-small-menu {
+		display: none;
+	}
+}
+@media screen and (min-width: 1200px) {
+	/* ===== スクエニロゴ ===== */
+	.sqex-header-logo {
+	}
+	/* ===== PCサイズ用メニュー ===== */
+	.sqex-large-menu {
+	}
+		/* ----- 検索エリア ----- */
+		.sqex-header-search {
+			padding-right: 20px;
+		}
+			.sqex-header-search input {
+				width: 135px;
+			}
+		/* ----- メニューボタン共通 ----- */
+		.sqex-large-menu-button {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+		/* ----- 上側メニューボタン ----- */
+		.sqex-large-menu-main-l .sqex-large-menu-button span {
+			height: 18px;
+		}
+		.sqex-large-menu-button.game {/* ゲーム */
+			width: 53px;
+		}
+			.sqex-large-menu-button.game span {
+				background-image: url(../img/label/games.png);
+			}
+		.sqex-large-menu-button.books {/* マガジン */
+			width: 156px;
+		}
+			.sqex-large-menu-button.books span {
+				background-image: url(../img/label/books.png);
+			}
+		.sqex-large-menu-button.music {/* ミュージック */
+			width: 103px;
+		}
+			.sqex-large-menu-button.music span {
+				background-image: url(../img/label/music.png);
+			}
+		.sqex-large-menu-button.goods {/* グッズ */
+			width: 52px;
+		}
+			.sqex-large-menu-button.goods span {
+				background-image: url(../img/label/goods.png);
+			}
+		/* ----- 下側メニューボタン ----- */
+		.sqex-large-menu-sub .sqex-large-menu-button span {
+			height: 17px;
+		}
+		.sqex-large-menu-button.store {/* ストア */
+			width: 48px;
+		}
+			.sqex-large-menu-button.store span {
+				background-image: url(../img/label/store.png);
+			}
+		.sqex-large-menu-button.members {/* メンバーズ */
+			width: 83px;
+		}
+			.sqex-large-menu-button.members span {
+				background-image: url(../img/label/members.png);
+			}
+		.sqex-large-menu-button.presents {/* 動画 */
+			width: 48px;
+		}
+			.sqex-large-menu-button.presents span {
+				background-image: url(../img/label/presents.png);
+			}
+		.sqex-large-menu-button.company {/* 会社概要 */
+			width: 66px;
+		}
+			.sqex-large-menu-button.company span {
+				height: 16px;
+				background-image: url(../img/label/company.png);
+			}
+		.sqex-large-menu-button.recruit {/* 採用情報 */
+			width: 66px;
+		}
+			.sqex-large-menu-button.recruit span {
+				height: 16px;
+				background-image: url(../img/label/recruit.png);
+			}
+}
+@media screen and (max-width: 1199px) {
+	/* ===== スクエニロゴ ===== */
+	.sqex-header-logo {
+	}
+	/* ===== PCサイズ用メニュー ===== */
+	.sqex-large-menu {
+	}
+		/* ----- 検索エリア ----- */
+		.sqex-header-search {
+			padding-right: 10px;
+		}
+			.sqex-header-search input {
+				width: 100px;
+			}
+		/* ----- メニューボタン共通 ----- */
+		.sqex-large-menu-button {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		/* ----- 上側メニューボタン ----- */
+		.sqex-large-menu-main-l .sqex-large-menu-button span {
+			height: 14px;
+		}
+		.sqex-large-menu-button.game {/* ゲーム */
+			width: 41px;
+		}
+			.sqex-large-menu-button.game span {
+				background-image: url(../img/label/games_s.png);
+			}
+		.sqex-large-menu-button.books {/* マガジン */
+			width: 127px;
+		}
+			.sqex-large-menu-button.books span {
+				background-image: url(../img/label/books_s.png);
+			}
+		.sqex-large-menu-button.music {/* ミュージック */
+			width: 83px;
+		}
+			.sqex-large-menu-button.music span {
+				background-image: url(../img/label/music_s.png);
+			}
+		.sqex-large-menu-button.goods {/* グッズ */
+			width: 41px;
+		}
+			.sqex-large-menu-button.goods span {
+				background-image: url(../img/label/goods_s.png);
+			}
+		/* ----- 下側メニューボタン ----- */
+		.sqex-large-menu-sub .sqex-large-menu-button span {
+			height: 15px;
+		}
+		.sqex-large-menu-button.store {/* ストア */
+			width: 38px;
+		}
+			.sqex-large-menu-button.store span {
+				height: 13px;
+				background-image: url(../img/label/store_s.png);
+			}
+		.sqex-large-menu-button.members {/* メンバーズ */
+			width: 67px;
+		}
+			.sqex-large-menu-button.members span {
+				background-image: url(../img/label/members_s.png);
+			}
+		.sqex-large-menu-button.presents {/* 動画 */
+			width: 38px;
+		}
+			.sqex-large-menu-button.presents span {
+				height: 13px;
+				background-image: url(../img/label/presents_s.png);
+			}
+		.sqex-large-menu-button.company {/* 会社概要 */
+			width: 59px;
+		}
+			.sqex-large-menu-button.company span {
+				background-image: url(../img/label/company_s.png);
+			}
+		.sqex-large-menu-button.recruit {/* 採用情報 */
+			width: 59px;
+		}
+			.sqex-large-menu-button.recruit span {
+				background-image: url(../img/label/recruit_s.png);
+			}
+}
+
+/* ==================== スマホサイズ ==================== */
+@media screen and (max-width: 767px) {
+	header {
+	}
+	/* ===== スクエニヘッダ ===== */
+	.sqex-header {
+		height: 45px;
+	}
+	.sqex-header-main {
+		box-sizing: border-box;
+		position: fixed;
+		z-index: 1002;
+		width: 100%;
+		height: 45px;
+		background-color: #fff;
+		border-bottom: 1px solid #f1f1f1;
+	}
+	/* ===== スクエニロゴ ===== */
+	.sqex-header-logo {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		-webkit-align-items: center;
+		margin-right: auto;
+		margin-left: auto;
+		width: 160px;
+		height: 45px;
+	}
+		.sqex-header-logo a {
+		}
+			.sqex-header-logo a img {
+				width: 100%;
+			}
+	/* ===== メニュー開閉ボタン ===== */
+	.sqex-small-menu-button {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 44px;
+		height: 44px;
+	}
+		.sqex-small-menu-button ul,
+		.sqex-small-menu-button li {
+			display: inline-block;
+			box-sizing: border-box;
+			transition: all .2s;
+		}
+		.sqex-small-menu-button ul {
+			position: relative;
+			margin-left: 11px;
+			margin-top: 14px;
+			width: 22px;
+			height: 16px;
+		}
+		/* ----- メニューボタンの棒 ----- */
+		.sqex-small-menu-button li {
+			position: absolute;
+			width: 100%;
+			height: 4px;
+			background-color: #000;
+			border: 0px solid transparent;
+			border-radius: 2px;
+		}
+			.sqex-small-menu-button li:nth-of-type(1) {
+				top: 0;
+			}
+			.sqex-small-menu-button li:nth-of-type(2) {
+				top: 6px;
+			}
+			.sqex-small-menu-button li:nth-of-type(3) {
+				bottom: 0;
+			}
+	/* ----- メニュー開閉ボタン：アクティブ状態 ----- */
+	/* アクティブ状態 */
+	.sqex-small-menu-button.active {
+	}
+		/* １つめの棒 */
+		.sqex-small-menu-button.active li:nth-of-type(1) {
+		}
+		/* 真ん中の棒 */
+		.sqex-small-menu-button.active li:nth-of-type(2) {
+		}
+		/* ３つめの棒 */
+		.sqex-small-menu-button.active li:nth-of-type(3) {
+		}
+
+	/* ===== スクエニメニューオーバーレイ ===== */
+	.sqex-small-menu-overlay {
+		z-index: 1001;
+	}
+
+	/* ===== スマホサイズ用メニュー ===== */
+	.sqex-small-menu {
+		z-index: 1001;
+		width: 80%;
+	}
+		.sqex-small-menu-content {
+			background-color: #dadada;
+		}
+		/* ----- メニュー見出し ----- */
+		.sqex-small-menu-header {
+			padding-top: 13px;
+			padding-bottom: 12px;
+			font-size: 15px;
+			font-weight: bold;
+			text-align: center;
+		}
+		/* ----- リストボタンエリア ----- */
+		.sqex-small-menu-main {
+			margin-bottom: 8px;
+			padding-left: 12px;
+			font-size: 15px;
+			background-color: #fff;
+		}
+			.sqex-small-menu-main li {
+				border-top: 1px solid #dadada;
+			}
+			.sqex-small-menu-main li:first-of-type {
+				border-top: none;
+			}
+			.sqex-small-menu-main a {
+				display: block;
+				padding-top: 10px;
+				padding-bottom: 9px;
+				color: #000;
+				text-decoration: none;
+			}
+		/* ----- サブメニューエリア ----- */
+		.sqex-small-menu-sub {
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+			.sqex-small-menu-sub ul {
+				width: 100%;
+			}
+			.sqex-small-menu-sub li {
+				box-sizing: border-box;
+				float: left;
+				width: 50%;
+			}
+			.sqex-small-menu-sub li:nth-of-type(odd) {
+				padding-right: 4px;
+			}
+			.sqex-small-menu-sub li:nth-of-type(even) {
+				padding-left: 4px;
+			}
+			.sqex-small-menu-sub a {
+				display: block;
+				padding-top: 8px;
+				padding-bottom: 8px;
+				color: #000;
+				font-size: 15px;
+				text-align: center;
+				text-decoration: none;
+				background-color: #fff;
+			}
+
+	/* ===== PC用メニュー非表示処理 ===== */
+	.sqex-large-menu {
+		display: none;
+	}
+}
+
+/* ============================================================ */
+/* フッタ */
+/* ============================================================ */
+footer {
+}
+	/* ===== スクエニフッタ ===== */
+	.sqex-footer {
+	}
+
+/* ==================== PCサイズ ==================== */
+@media screen and (min-width: 768px) {
+	footer {
+		box-sizing: border-box;
+		/*min-width: 980px;*/
+		background-color: #e5e5e5;
+	}
+	/* ===== スクエニフッタ ===== */
+	.sqex-footer {
+		margin-right: auto;
+		margin-left: auto;
+		max-width: 1920px;
+		/*min-width: 980px;*/
+	}
+	/* ===== リンク置き場 ===== */
+	.sqex-footer-navi {
+	}
+	/* 中項目用 */
+	.sqex-footer-navi-main {
+		display: block;
+	}
+		.sqex-footer-navi-main-list {
+			display: flex;
+		}
+		.sqex-footer-navi-main-list .sqex-footer-navi-main-item:nth-of-type(2) {
+			padding-left: 20px;
+		}
+	/* ----- 大見出し ----- */
+	.sqex-footer-navi-h1 {
+		position: relative;
+		margin-bottom: 15px;
+		padding-left: 12px;
+		font-size: 16px;
+		font-weight: bold;
+		white-space: nowrap;
+	}
+		/* アイコン */
+		.sqex-footer-navi-h1:before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 3px;
+			left: 0;
+			width: 4px;
+			height: 15px;
+			border: 0px solid transparent;
+			border-radius: 3px;
+			background-color: #4f5255;
+		}
+	/* ----- 中見出し ----- */
+	.sqex-footer-navi-h2 {
+		font-size: 14px;
+		font-weight: bold;
+		white-space: nowrap;
+	}
+	/* ----- リンクエリア ----- */
+	.sqex-footer-navi-link {
+		padding-left: 10px;
+		padding-bottom: 25px;
+	}
+		.sqex-footer-navi-link a {
+			color: #60676f;
+			font-size: 12px;
+			font-weight: bold;
+			text-decoration: none;
+		white-space: nowrap;
+		}
+
+	/* ===== メインリンクエリア ===== */
+	.sqex-footer-menu-main {
+		width: 100%;
+		box-sizing: border-box;
+		display: flex;
+		flex-wrap: wrap;
+		-webkit-flex-wrap: wrap;
+		justify-content: flex-start;
+		-webkit-justify-content: flex-start;
+		position: relative;
+		padding-top: 28px;
+		border-bottom: 1px solid #c6c6c6;
+	}
+		.sqex-footer-menu-main-item {
+			margin-right: 3%;
+			margin-left: 3%;
+			margin-bottom: 25px;
+		}
+		.sqex-footer-menu-main td {
+			vertical-align: top;
+		}
+		/* 列間調整 */
+		.sqex-footer-menu-main-col {
+			padding-left: 30px;
+		}
+
+	/* ===== サブリンクエリア ===== */
+	.sqex-footer-menu-sub {
+		padding-top: 20px;
+		color: #60676f;
+		font-size: 12px;
+	}
+		/* リストのセンタリング */
+		.sqex-footer-menu-sub-main {
+			display: flex;
+			-webkit-justify-content: center;
+			justify-content: center;
+		}
+		.sqex-footer-menu-sub-main ul {
+			display: flex;
+			-webkit-justify-content: center;
+			justify-content: center;
+		}
+		.sqex-footer-menu-sub-main li {
+			position: relative;
+			display: block;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+			/* 分割線 */
+			.sqex-footer-menu-sub-main li:after {
+				content: "|";
+				display: block;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+			/* 末尾の分割線を削除 */
+			.sqex-footer-menu-sub-main ul:last-of-type li:last-of-type:after {
+				display: none;
+			}
+		/* フッターサブリンク */
+		.sqex-footer-menu-sub a {
+			color: #60676f;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+	/* ===== コピーライト ===== */
+	.sqex-footer-copyright {
+		padding-top: 15px;
+		padding-bottom: 30px;
+		font-size: 14px;
+		text-align: center;
+	}
+}
+
+/* ==================== スマホサイズ ==================== */
+@media screen and (max-width: 767px) {
+	/* ===== スクエニフッタ ===== */
+	.sqex-footer {
+	}
+		.sqex-footer table, 
+		.sqex-footer tbody, 
+		.sqex-footer tr, 
+		.sqex-footer th, 
+		.sqex-footer td {
+			display: block;
+		} 
+	/* ===== リンク置き場 ===== */
+	.sqex-footer-navi {
+	}
+	/* 中項目用 */
+	.sqex-footer-navi-main {
+		display: none;
+		padding-left: 8px;
+		padding-right: 8px;
+	}
+		.sqex-footer-navi-main-list {
+			display: flex;
+		}
+		.sqex-footer-navi-main-list .sqex-footer-navi-main-item:nth-of-type(2) {
+			padding-left: 10px;
+		}
+	/* ----- 大見出し ----- */
+	.sqex-footer-navi-h1 {
+		position: relative;
+		padding-top: 6px;
+		padding-bottom: 4px;
+		padding-left: 20px;
+		font-size: 12px;
+		border-bottom: 1px solid #c8c8c8;
+		background-color: #e5e5e5;
+	}
+		/* アイコン */
+		.sqex-footer-navi-h1:before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 8px;
+			left: 8px;
+			width: 4px;
+			height: 13px;
+			border: 0px solid transparent;
+			border-radius: 3px;
+			background-color: #4f5255;
+		}
+	/* ----- 中見出し ----- */
+	.sqex-footer-navi-h2 {
+		padding-top: 5px;
+		font-size: 11px;
+		font-weight: bold;
+	}
+	/* ----- リンクエリア ----- */
+	.sqex-footer-navi-link {
+	}
+		.sqex-footer-navi-link a {
+			color: #60676f;
+			font-size: 11px;
+			text-decoration: none;
+		}
+	/* ===== サブリンクエリア ===== */
+	.sqex-footer-menu-sub {
+		padding-top: 12px;
+		color: #6d6d6d;
+		font-size: 11px;
+		background-color: #e5e5e5;
+	}
+		.sqex-footer-menu-sub-main {
+		}
+		/* フッターサブリンク */
+		.sqex-footer-menu-sub ul {
+			display: flex;
+			-webkit-justify-content: center;
+			justify-content: center;
+		}
+		.sqex-footer-menu-sub li {
+			position: relative;
+			text-align: center;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+			.sqex-footer-menu-sub li:nth-of-type(2):after {
+				content: "|";
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		.sqex-footer-menu-sub a {
+			color: #60676f;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+	/* ===== コピーライト ===== */
+	.sqex-footer-copyright {
+		padding-top: 12px;
+		padding-bottom: 12px;
+		font-size: 10px;
+		text-align: center;
+		background-color: #e5e5e5;
+	}
+}
+

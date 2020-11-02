@@ -1,0 +1,50 @@
+$(function () {
+    var result = false;
+	var windowW = $(window).width();
+	var changeW = 768;
+	if (windowW < changeW) {
+        $('#sqexSiteSearch_sp').html('<div class="mt-site-search-container"><div id="mt-site-search" class="mt-site-search" data-fields="keywords" data-language="ja_JP" data-entry-jsons="https://search-1573723203-16394.movabletype.io/5e1ef1c45ff27503e9877470/entry.json" data-storage-id="5e1ef1c45ff27503e9877470" data-no-site-fetch="1" data-site-id="21312" data-search-result-container="mtss-result" data-search-id="5e1ef1c45ff27503e9877470"></div><script src="https://site-search.movabletype.net/v1/assets/21312/js/search.js" id="mt-site-search-script" async defer></script></div>');
+	} else {
+        $('#sqexSiteSearch_pc').html('<div class="mt-site-search-container"><div id="mt-site-search" class="mt-site-search" data-fields="keywords" data-language="ja_JP" data-entry-jsons="https://search-1573723203-16394.movabletype.io/5e1ef1c45ff27503e9877470/entry.json" data-storage-id="5e1ef1c45ff27503e9877470" data-no-site-fetch="1" data-site-id="21312" data-search-result-container="mtss-result" data-search-id="5e1ef1c45ff27503e9877470"></div><script src="https://site-search.movabletype.net/v1/assets/21312/js/search.js" id="mt-site-search-script" async defer></script></div>');
+	}
+    var searchingForm = setInterval(searchForm, 100);
+    function searchForm() {
+        var forms = $('.mt-site-search-form');
+        if(forms.length > 0) {
+            clearInterval(searchingForm);
+            forms.attr('action', '');
+            forms.attr('autocomplete', 'off');
+        }
+    }
+    $(document).on('click', 'button.mt-site-search-form__button', function(){
+        result = true;
+        $('#mtss-result').empty();
+        $('.mtss-result-loading').css('display','block');
+        $('#mtss-result-wrap').fadeIn(500);
+        $('.mt-site-search-form__query').blur();
+        var mtssfq = $('.mt-site-search-form__query').val();
+        var searchingResultMessage = setInterval(searchResultMessage, 100);
+        function searchResultMessage() {
+            var results = $('.mt-site-search-result__message-message');
+            if(results.length > 0) {
+                clearInterval(searchingResultMessage);
+                $('.mtss-result-loading').css('display','none');
+                gtag('event', 'サイト内検索', {'event_category': '共通パーツ','event_label': mtssfq});
+            } else if(!mtssfq) {
+                $('.mt-site-search-result').append('キーワードを入力してください');
+                $('.mtss-result-loading').css('display','none');
+                clearInterval(searchingResultMessage);
+            }
+        }
+    });
+    $('#mtss-result-wrap').on('click touchend', function(){
+        if (!$(event.target).closest('#mtss-result').length) {
+            if (result) {
+                result = false;
+                $('#mtss-result-wrap,#mtss-result > div').css('display','none');
+                $('#mtss-result').empty();
+                $('.mtss-result-loading').removeAttr('style');
+            }
+        }
+    });
+});

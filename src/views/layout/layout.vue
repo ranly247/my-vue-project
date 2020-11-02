@@ -28,10 +28,6 @@
                     background-color="#37363b"
                     active-text-color="#ff9234"
                     :default-active="$route.name">
-                    <el-menu-item index="welcome">
-                        <i class="el-icon-location-outline"></i>
-                        <span slot="title">首页在这呢！</span>
-                    </el-menu-item>
                     <template v-for="item in menus">
                         <!--左侧导航条-->
                         <el-submenu v-if="item.children.length > 0" :key="item.menuId" :index="item.menuPath" unique-opened="true">

@@ -1,0 +1,602 @@
+var lemirue={};lemirue.version="0.0.4",lemirue.noop=function(){},lemirue.isNumeric=function(e){return"number"!=typeof e?!1:e===parseFloat(e)&&isFinite(e)},lemirue.isArray=function(e){return"[object Array]"===Object.prototype.toString.call(e)},lemirue.getType=function(e){return void 0===e?"undefined":null===e?"null":lemirue.isArray(e)===!0?"array":lemirue.isNumeric(e)===!0?"number":typeof e},lemirue.forRange=function(e,t,r){for(var i;t>e;e++)if(i=r(e),void 0!==i){if(i===!0)continue;break}},lemirue.getDocumentScroll=function(){return{scrollLeft:document.documentElement.scrollLeft||document.body.scrollLeft,scrollTop:document.documentElement.scrollTop||document.body.scrollTop}},lemirue.getViewportSize=function(){var e,t,r,i=window.innerHeight;return void 0!==i?(r=document.documentElement.scrollHeight,window===window.top&&i>r&&(i-=15),e=window.innerWidth,t=i):void 0!==document.documentElement&&0!==document.documentElement.clientWidth?(e=document.documentElement.clientWidth,t=document.documentElement.clientHeight):(e=document.getElementsByTagName("body")[0].clientWidth,t=document.getElementsByTagName("body")[0].clientHeight),{width:e,height:t}},lemirue.net={},lemirue.net.getUrlParameter=function(e,t){return lemirue.queryString.get(location.search,e,t)},lemirue.net.getUrlParameters=function(){return lemirue.queryString.parse(lemirue.string.trim(location.search,"?"))},lemirue.net.existsUrlParameter=function(e){return lemirue.queryString.keyExists(location.search,e)},lemirue.net.addUrlParameters=function(e,t,r){var i="",n={},l=lemirue.net.urlInfo(e);return"string"===lemirue.getType(t)&&void 0!==r?void 0!==r?(n[t]=r,i=lemirue.object.toQueryString(n)):i=lemirue.string.build(t,"=",r):"object"===lemirue.getType(t)&&(n=t,i=lemirue.object.toQueryString(n)),""===i?e:(""!==l.search&&(i=lemirue.queryString.join(l.search,i)),lemirue.string.build(lemirue.net.removeUrlParameters(e),i,l.hash))},lemirue.net.removeUrlParameters=function(e){var t=e.match(/[^#\?]*/);return null!==t?t[0]:e},lemirue.net.addUrlCacheClearParameter=function(e,t,r){return void 0===t&&(t=(new Date).getTime()),void 0===r&&(r="__lemirue__"),lemirue.net.addUrlParameters(e,r,t)},lemirue.net.urlInfo=function(e){var t=e.match(/(^[httpsfile]+):\/{2,3}([0-9a-zA-Z\.\-:]+?):?([0-9]*?)\/([0-9a-zA-Z\.\-\/_]*)(\??[^#]*)(#?.*)/i),r={protocol:"",hostname:"",port:"",pathname:"",search:"",hash:""};return null!==t&&(r={protocol:t[1],hostname:t[2],port:t[3],pathname:t[4],search:t[5],hash:t[6]}),r},lemirue.net.basename=function(e,t){var r;return null!==(r=e.match(".+/(.+?).[ a-z ]+([ ?#; ].*)?$"))?r[1]:t||null},lemirue.net.ext=function(e,t){var r;return null!==(r=e.match(".+/.+?.([ a-z ]+([ ?#; ].*)?$)"))?r[1]:t||null},lemirue.net.sendForm=function(e,t,r,i){var n,l=document.createElement("form");l.setAttribute("method",t),l.setAttribute("action",e);for(n in r){var u=document.createElement("input");u.setAttribute("type","hidden"),u.setAttribute("name",n),u.setAttribute("value",r[n]),l.appendChild(u)}void 0===i&&(i=document.body),i.appendChild(l),l.submit()},lemirue.net.ajax=function(e){return new function(e){var t=this,r=lemirue.object.merge({url:void 0,cache:!1,method:"GET",success:lemirue.noop,error:lemirue.noop,complete:lemirue.noop,timeout:void 0},e);r=lemirue.object.merge(r,{xhrIo:null,timeOutId:null,deffered:null});var i={success:function(){r.success.call(t,r.xhrIo),r.deffered.resolve(r.xhrIo)},error:function(){r.error.call(t,r.xhrIo),r.deffered.reject(r.xhrIo)},complete:function(){r.complete.call(t,r.xhrIo),null!==r.timeOutId&&(clearTimeout(r.timeOutId),r.timeOutId=null)},init:function(){r.deffered=lemirue.deffered(),r.deffered.promise(),r.initXhrIo(),r.send(r.url)}};return r.initXhrIo=function(){r.xhrIo=function(){if(!window.ActiveXObject)return window.XMLHttpRequest?new XMLHttpRequest:null;try{return new ActiveXObject("Msxml2.XMLHTTP")}catch(e){try{return new ActiveXObject("Microsoft.XMLHTTP")}catch(e){return null}}}(),null===r.xhrIo?i.error():r.xhrIo.onreadystatechange=function(){try{4===Number(r.xhrIo.readyState)&&(200===Number(r.xhrIo.status)?i.success():i.error(),i.complete())}catch(e){}}},r.send=function(e){r.cache===!1&&(e=lemirue.net.addUrlCacheClearParameter(e));try{r.xhrIo.open(r.method,e),r.xhrIo.send(e)}catch(t){i.error()}void 0!==r.timeout&&(r.timeOutId=setTimeout(function(){r.xhrIo.abort()},r.timeout))},i.init.call(t),r.deffered}(e)},lemirue.deffered=function(){return new function(){var e=this,t={isPromise:!1},r={done:lemirue.noop,fail:lemirue.noop,always:lemirue.noop};e.done=function(t){return r.done=t,e},e.fail=function(t){return r.fail=t,e},e.always=function(t){return r.always=t,e},e.promise=function(){t.isPromise=!0},e.resolve=function(i){t.isPromise===!0&&(r.done.call(e,i),r.always.call(e,i))},e.reject=function(i){t.isPromise===!0&&(r.fail.call(e,i),r.always.call(e,i))}}},lemirue.string={},lemirue.string.build=function(){var e=[];return e.push.apply(e,arguments),e.join("")},lemirue.string.getChar=function(e,t){return 0>t&&(t=e.length+t),e.charAt(t)},lemirue.string.trim=function(e,t){if(void 0!==t)switch(lemirue.getType(t)){case"string":e=e.replace(t,"");break;case"array":lemirue.array.forEach(t,function(t){e=e.replace(t,"")})}return e.replace(/^\s+|\s+$/g,"")},lemirue.string.trimNewline=function(e){return e=e.replace(/\n/g,""),e=e.replace(/\r/g,""),e=e.replace(/\r\n/g,"")},lemirue.string.nlToBr=function(e){return e=e.replace(/\n/g,"<br>"),e=e.replace(/\r/g,"<br>"),e=e.replace(/\r\n/g,"<br>")},lemirue.string.sprintf=function(){for(var e,t=arguments[0],r=1,i=arguments.length;i>r;r++)e=arguments[r],"string"===lemirue.getType(e)?t=t.replace("%s",e):lemirue.isNumeric(e)===!0&&(t=t.replace("%d",e));return t},lemirue.string.getByteSize=function(e){for(var t=e.split(""),r=0,i=t.length,n=0;i>r;r++)n+=lemirue.string.getCharByteSize(t[r]);return n},lemirue.string.getCharByteSize=function(e){var t=e.charCodeAt(0);return 255>=t||t>=65377&&65439>=t?1:2},lemirue.string.getSerialNumber=function(e){for(var t,r=e.length-1,i=[];r>=0&&(t=e.charAt(r),lemirue.isNumeric(Number(t))!==!1);r--)i.unshift(t);return 0!==i.length?Number(i.join("")):void 0},lemirue.string.trimSerialNumber=function(e){var t=lemirue.string.getSerialNumber(e);return void 0===t?e:e.substring(0,e.length-t.toString().length)},lemirue.string.convertDotSyntaxToArrayLiteral=function(e){return lemirue.string.build('["',e.replace(new RegExp("\\.","ig"),'"]["'),'"]')},lemirue.string.evalCode=function(code,valueMap){var i=0,l,str,strProp;for(code=lemirue.string.trim(code),code=code.split(" "),l=code.length;l>i;i++)str=code[i],strProp=void 0,lemirue.string.validate(str,"variable")===!0?(str.indexOf(".")>-1&&(strProp=str.substr(str.indexOf(".")),str=str.substring(0,str.indexOf("."))),lemirue.object.keyExists(valueMap,str)===!0?(str=lemirue.string.build("valueMap",lemirue.string.convertDotSyntaxToArrayLiteral(str)),void 0!==strProp&&(str=lemirue.string.build(str,strProp))):str="undefined"):lemirue.string.validate(str,"operator")===!1&&lemirue.string.validate(str,"enclosed")===!1&&(str=""),code[i]=str;return eval(code.join(""))},lemirue.string.validate=function(e,t){switch(t){case"operator":return null===e.match(/[^\+-=<>\*!?&]/);case"enclosed":return null!==e.match(/^[\"\'].*[\"\']$/);case"variable":return null===e.match(/[^a-zA-Z0-9_\.]+/)&&null!==e.match(/^[_a-zA-Z]/)}},lemirue.string.padLeft=function(e,t,r){e=e.toString();var i=e.length,n=t-i,l=[];if(0>=n)return e;for(;n>0;n--)l.push(r);return l.push(e),l.join("")},lemirue.array={},lemirue.array.clone=function(e){return e.slice()},lemirue.array.shuffle=function(e){for(var t,r=lemirue.array.clone(e),i=[],n=r.length;n;)t=Math.floor(Math.random()*n),n-=1,i.push(r.splice(t,1)[0]);return r},lemirue.array.forEach=function(e,t){for(var r,i=0,n=e.length;n>i;i++)if(r=t(e[i],i),void 0!==r){if(r===!0)continue;break}},lemirue.array.indexOf=function(e,t){for(var r=0,i=e.length;i>r;r++)if(t===e[r])return r;return-1},lemirue.array.last=function(e){return e[e.length-1]},lemirue.array.chunk=function(){},lemirue.array.sort=function(e,t){e=lemirue.array.clone(e);var r=1;return void 0!==t&&"desc"===t.toLowerCase()&&(r=-1),e.sort(function(e,t){return t>e?-1*r:e==t?0:1*r}),e},lemirue.array.sortByKey=function(e,t,r){e=lemirue.array.clone();var i=1;void 0!==r&&"desc"===r.toLowerCase()&&(i=-1),e.sort(function(e,r){return e[t]<r[t]?-1*i:e[t]==r[t]?0:1*i})},lemirue.object={},lemirue.object.keyExists=function(e,t){return t in e},lemirue.object.getLength=function(e){return Object.keys(e).length},lemirue.object.merge=function(){for(var e,t,r={},i=0,n=arguments.length;n>i;i++){e=arguments[i];for(t in e)lemirue.object.keyExists(e,t)===!0&&(r[t]=e[t])}return r},lemirue.object.sort=function(e,t){var r,i,n=[],l=[],u=0;for(r in e)n.push(r);for(n=lemirue.array.sort(n,t),i=n.length;i>u;u++)l.push(e[n[u]]);return l},lemirue.object.toQueryString=function(e,t){var r,i=[];t=lemirue.object.merge(t,{separate:"&",equal:"="});for(r in e)i.push(lemirue.string.build(r,t.equal,e[r]||""));return i.join(t.separate)},lemirue.json={},lemirue.json.parse=function(e){try{return JSON.parse(e)}catch(t){return window.eval(lemirue.string.build("(",e,")"))}},lemirue.json.stringify=function(e){try{return JSON.stringify(e)}catch(t){var r=[];return lemirue.json._stringify(e,r),r.join("")}},lemirue.json._stringify=function(e,t){switch(lemirue.getType(e)){case"string":t.push(lemirue.string.build('"',e,'"'));break;case"number":case"boolean":t.push(e);break;case"undefined":t.push("null");break;case"object":if("null"==typeof e)break;t=lemirue.json.stringifyObject(e,t);break;case"array":t=lemirue.json.stringifyArray(e,t)}},lemirue.json.stringifyArray=function(e,t){var r=0,i=e.length,n="";for(t.push("[");i>r;r++)t.push(n),lemirue.json._stringify(e[r],t),n=",";return t.push("]"),t},lemirue.json.stringifyObject=function(e,t){var r,i="";t.push("{");for(r in e)if(lemirue.object.keyExists(e,r)===!0){var n=e[r];"function"!==lemirue.getType(n)&&(t.push(i),t.push(lemirue.string.build('"',r,'"')),t.push(":"),lemirue.json._stringify(n,t),i=",")}return t.push("}"),t},lemirue.queryString={},lemirue.queryString.parse=function(e,t){var r,i={};t=lemirue.object.merge(t,{separate:"&",equal:"="}),e=lemirue.string.trim(e),r=e.split(t.separate);for(var n=0;n<r.length;n++){var l,u,o=r[n];o=o.split(t.equal),l=o[0],u=o[1]||"",lemirue.object.keyExists(i,l)===!1?i[l]=u:(lemirue.isArray(i[l])===!1&&(i[l]=[i[l]]),i[l].push(u))}return i},lemirue.queryString.get=function(e,t,r,i){i=lemirue.object.merge(i,{separate:"&",equal:"="}),t=lemirue.string.build(t,i.equal);var n,l,u=e.indexOf(t);return-1===u?r||void 0:(n=t.length+u,-1===(l=e.indexOf(i.separate,n))&&(l=e.length),e.substring(n,l))},lemirue.queryString.join=function(e,t,r){e=lemirue.queryString.parse(e,r),t=lemirue.queryString.parse(t,r);var i=lemirue.object.merge(e,t);return lemirue.object.toQueryString(i,r)},lemirue.queryString.keyExists=function(e,t,r){return void 0!==lemirue.queryString.get(e,t,void 0,r)},lemirue.cookies={},lemirue.cookies.get=function(e,t){for(var r,e=lemirue.string.build(e,"="),i=document.cookie,n=0,l=0;n<i.length;){if(l=n+e.length,i.substring(n,l)===e)return r=i.indexOf(";",l),-1===r&&(r=i.length),unescape(i.substring(l,r));if(n=i.indexOf(" ",n)+1,0===n)break}return t},lemirue.cookies.set=function(e,t,r){if(void 0!==e){var i,t,n=lemirue.string.build(e,"=",escape(t)),l=lemirue.object.merge({path:null,domain:null,secure:null,expires:null,days:0,hours:0,minutes:0},r);(l.days>0||l.hours>0||l.minutes>0)&&(l.expires=lemirue.date.create(l).toGMTString());for(i in l)t=l[i],"path"!==i&&"domain"!==i&&"secure"!==i&&"expires"!==i||null===t||(n=lemirue.string.sprintf("%s; %s=%s",n,i,t));document.cookie=n}},lemirue.cookies.remove=function(e){void 0!==e&&lemirue.cookies.set(e,"",{expires:new Date(1970).toGMTString()})},lemirue.date={},lemirue.date.create=function(e){var t=new Date,r=(lemirue.object.merge({days:0,hours:0,minutes:0,seconds:0,milliseconds:0},e),lemirue.date.convertToMilliseconds(e));return Math.abs(r)>0&&t.setTime(t.getTime()+r),t},lemirue.date.convertToMilliseconds=function(e){var t=lemirue.object.merge({days:0,hours:0,minutes:0,seconds:0,milliseconds:0},e);return t.days=864e5*t.days,t.hours=36e5*t.hours,t.minutes=6e4*t.minutes,t.seconds=1e3*t.seconds,t.days+t.hours+t.minutes+t.seconds+t.milliseconds},lemirue.browser={},lemirue.browser.getLanguage=function(){var e=navigator;return void 0!==e.languages?e.languages[0]:e.language||e.browserLanguage||e.userLanguage},lemirue.browser.existsTouchEvent=function(){return"ontouchstart"in window},lemirue.browser.getWheelEventName=function(){return"onwheel"in document?"wheel":"onmousewheel"in document?"mousewheel":"DOMMouseScroll"},lemirue.browser.isTablet=function(){var e=navigator.userAgent.toLowerCase();return-1!=e.indexOf("windows")&&-1!=e.indexOf("touch")&&-1==e.indexOf("tablet pc")||-1!=e.indexOf("ipad")||-1!=e.indexOf("android")&&-1==e.indexOf("mobile")||-1!=e.indexOf("firefox")&&-1!=e.indexOf("tablet")||-1!=e.indexOf("kindle")||-1!=e.indexOf("silk")||-1!=e.indexOf("playbook")},lemirue.browser.isMobile=function(){var e=navigator.userAgent.toLowerCase();return-1!=e.indexOf("windows")&&-1!=e.indexOf("phone")||-1!=e.indexOf("iphone")||-1!=e.indexOf("ipod")||-1!=e.indexOf("android")&&-1!=e.indexOf("mobile")||-1!=e.indexOf("firefox")&&-1!=e.indexOf("mobile")||-1!=e.indexOf("blackberry")},lemirue.browser.getScrollInfo=function(){var e=window.document.body,t=window.document.documentElement,r=e.scrollTop||t.scrollTop,i=t.clientHeight;return{scrollTop:r,scrollBottom:r+Math.max(i,window.innerHeight||0),scrollFromBottom:t.scrollHeight-i-r}},lemirue.timer=function(e){return new function(e){var t=this,r=lemirue.object.merge({fps:60,delay:0,timeout:0,start:lemirue.noop,stop:lemirue.noop,progress:lemirue.noop,pause:lemirue.noop},e);r=lemirue.object.merge(r,{mainId:null,delayId:null,timeoutId:null,startTime:null});var i={init:function(){r.init.call(t,r.getEventArgument())},start:function(){r.start.call(t,r.getEventArgument())},stop:function(){r.stop.call(t,r.getEventArgument())},pause:function(){r.pause.call(t,r.getEventArgument())},progress:function(){r.progress.call(t,r.getEventArgument())},complete:function(){r.complete.call(t,r.getEventArgument())}};t.start=function(e){t.setOptions(e),r.confirmDelay()},t.stop=function(){r.clearAllTimerId(),i.stop()},t.pause=function(){r.clearAllTimerId(),i.pause()},t.setOptions=function(e){void 0!==e&&(r=lemirue.object.merge(r,e))},r.confirmDelay=function(){r.delay>0?r.delayId=setTimeout(r.confirmTimeout,r.delay):r.confirmTimeout()},r.confirmTimeout=function(){r.timeout>0?r.timeoutId=setTimeout(r.stopCount,r.timeout):r.startCount()},r.startCount=function(){r.startTime=(new Date).getTime(),i.start(),r.mainId=setInterval(i.progress,lemirue.math.convertFPSToMilliseconds(r.fps))},r.stopCount=function(){r.clearAllTimerId(),i.complete()},r.clearAllTimerId=function(){null!==r.mainId&&(clearInterval(r.mainId),r.mainId=null),null!==r.delayId&&(clearTimeout(r.delayId),r.delayId=null),null!==r.timeoutId&&(clearTimeout(r.timeoutId),r.timeoutId=null)},r.getElapsedTime=function(){return(new Date).getTime()-r.startTime},r.getEventArgument=function(){var e={delay:r.delay,elapsedTime:r.getElapsedTime()};return r.timeout>0&&(e.timeout=r.timeout,e.remainTime=r.timeout-e.elapsedTime),e}}(e)},lemirue.pager=function(e){return new function(e){var t=this,r=lemirue.object.merge({length:0,step:1,page:1,init:lemirue.noop,change:lemirue.noop},e);r=lemirue.object.merge(r,{index:0,maxPage:0,maxIndex:0});var i={init:function(){},changePage:function(){var e=t.getPageIndex(r.page);i.change({index:e.start,pageIndex:e})},changeIndex:function(){var e=t.getPageByIndex(r.index);i.change({page:e,pageIndex:t.getPageIndex(e)})},change:function(e){var i=lemirue.object.merge({pager:t,length:r.length,step:r.step,index:r.index,page:r.page,maxPage:t.getMaxPage(),maxIndex:t.getMaxIndex()},e);r.change.call(t,i)}};t.getPage=function(){return r.page},t.getPageByIndex=function(e){return Math.floor(e/r.step)+1},t.getPageIndex=function(){var e=(r.page-1)*r.step,i=e+r.step-1;return i>=t.getMaxIndex()&&(i=t.getMaxIndex()),{start:e,last:i}},t.gotoPage=function(e){return 1>e||e>t.getMaxPage()?!1:(r.page=e,i.changePage(),!0)},t.nextPage=function(){t.gotoPage(r.page+1)},t.prevPage=function(){t.gotoPage(r.page-1)},t.gotoIndex=function(e){return 0>e||e>t.getMaxIndex()?!1:(r.index=e,i.changeIndex(),!0)},t.nextIndex=function(){t.gotoIndex(r.index+1)},t.prevIndex=function(){t.gotoIndex(r.index-1)},t.getMaxPage=function(){return Math.ceil(r.length/r.step)},t.getMaxIndex=function(){return r.length-1},t.setOptions=function(e){r=lemirue.object.merge(r,e),r.maxPage=t.getMaxPage(),r.maxIndex=t.getMaxIndex()},i.init.call(t)}(e)},lemirue.number={},lemirue.number.toBinaryString=function(e){return e.toString(2)},lemirue.bit={},lemirue.bit.setFlag=function(e,t,r){return void 0===t||0>=t?void 0:(t-=1,r===!0||1===r?e|1<<t:~(~e|1<<t))},lemirue.bit.getFlag=function(e,t){if(void 0!==t){var r=lemirue.bit.setFlag(0,t,!0);return(e&r)===r}},lemirue.math={},lemirue.math.convertFPSToMilliseconds=function(e){return Math.floor(1e3/e)},lemirue.math.getAngleByPoint=function(e,t,r,i){var n=Math.atan2(i-t,r-e),l=Math.round(180*n/Math.PI);return 0>l&&(l=360-Math.abs(l)),l},lemirue.math.getDistanceByPoint=function(e,t,r,i){return Math.sqrt((r-e)*(r-e)+(i-t)*(i-t))},lemirue.math.colorCodeToRGB=function(e){return e=e.toString(),"#"===lemirue.string.getChar(e,0)&&(e=e.substring(1)),e=e.split(""),3===e.length&&(e=e[0]+e[0]+e[1]+e[1]+e[2]+e[2]),{r:parseInt(e.substring(0,2),16),g:parseInt(e.substring(2,4),16),b:parseInt(e.substring(4,6),16)}},lemirue.event={},lemirue.event.listen=function(e,t,r,i){if(e.addEventListener)return e.addEventListener(t,r,i),!0;if(e.attachEvent){var n=e.attachEvent("on"+t,function(){r.call(e,window.event)});return n}e["on"+type]=r},lemirue.event.unlisten=function(e,t,r){e.removeEventListener?e.removeEventListener(t,r):e.detachEvent?e.detachEvent("on"+t,r):e["on"+type]=lemirue.noop},lemirue.on={},lemirue.on.tap=function(e,t){0==lemirue.object.keyExists(e,"lemirue")&&(e.lemirue={}),void 0===e.lemirue.tap&&(e.lemirue.tap={isStart:!1,startX:0,startY:0,timer:null,handler:[]}),e.lemirue.tap.handler.push(t);var r=200,i=10,n=function(t){var i,n,l=t;lemirue.object.keyExists(l,"touches")&&(l=l.touches[0]),i=l.pageX,n=l.pageY,e.lemirue.tap.isStart=!0,e.lemirue.tap.startX=i,e.lemirue.tap.startY=n,clearTimeout(e.lemirue.tap.timer),e.lemirue.tap.timer=setTimeout(function(){e.lemirue.tap.isStart=!1},r)},l=function(t){if(e.lemirue.tap.isStart!==!1){var r,n,l=t;lemirue.object.keyExists(l,"touches")&&(l=l.touches[0]),r=l.pageX,n=l.pageY,(Math.abs(r-e.lemirue.tap.startX)>i||Math.abs(n-e.lemirue.tap.startY)>i)&&(e.lemirue.tap.isStart=!1)}},u=function(){e.lemirue.tap.isStart!==!1&&(e.lemirue.tap.isStart=!1,lemirue.forRange(0,e.lemirue.tap.handler.length,function(t){e.lemirue.tap.handler[t].call(e)}))},o=function(){e.lemirue.tap.isStart=!1};lemirue.event.listen(e,"mousedown",n),lemirue.event.listen(e,"mouseup",u),lemirue.event.listen(e,"mouseleave",o),lemirue.event.listen(e,"mousemove",l),"ontouchstart"in window&&(lemirue.event.listen(e,"touchstart",n),lemirue.event.listen(e,"touchend",u),lemirue.event.listen(e,"touchcancel",o),lemirue.event.listen(e,"touchmove",l))},lemirue.on.scrollThreshold=function(e,t,r){0==lemirue.object.keyExists(e,"lemirue")&&(e.lemirue={}),void 0===e.lemirue.scrollthreshold&&(e.lemirue.scrollthreshold={index:void 0,position:[],handler:[]}),e.lemirue.scrollthreshold.handler.push(t),1==lemirue.isNumeric(r)?e.lemirue.scrollthreshold.position[r]:1==lemirue.isArray(r)&&(e.lemirue.scrollthreshold.position=r);var i=function(){var t,r,i=e.lemirue.scrollthreshold.position.length,n=e===window?lemirue.getDocumentScroll().scrollTop:e.scrollTop;0!==i&&(lemirue.forRange(0,i,function(i){return t=e.lemirue.scrollthreshold.position[i],t>n?(r=i,!1):void 0}),void 0===r&&(r=i),e.lemirue.scrollthreshold.index!==r&&lemirue.forRange(0,e.lemirue.scrollthreshold.handler.length,function(t){e.lemirue.scrollthreshold.handler[t].call(e,{index:r})}))};lemirue.event.listen(e,"scroll",i),e===window&&lemirue.event.listen(e,"load",i),"ontouchstart"in window&&lemirue.event.listen(e,"touchmove",i)},lemirue.on.resizeThreshold=function(e,t,r){if(e===window){0==lemirue.object.keyExists(e,"lemirue")&&(e.lemirue={}),void 0===e.lemirue.resizethreshold&&(e.lemirue.resizethreshold={index:void 0,width:[],handler:[]}),e.lemirue.resizethreshold.handler.push(t),1==lemirue.isNumeric(r)&&(e.lemirue.resizethreshold.width=[r]),1==lemirue.isArray(r)&&(e.lemirue.resizethreshold.width=r);var i=function(){var t,r,i=lemirue.getViewportSize().width,n=e.lemirue.resizethreshold.width.length;0!==n&&(lemirue.forRange(0,n,function(n){return t=e.lemirue.resizethreshold.width[n],t>i?(r=n,!1):void 0}),void 0===r&&(r=n),e.lemirue.resizethreshold.index!==r&&lemirue.forRange(0,e.lemirue.resizethreshold.handler.length,function(t){e.lemirue.resizethreshold.handler[t].call(e,{index:r})}))};lemirue.event.listen(e,"resize",i),lemirue.event.listen(e,"load",i),"ontouchstart"in window&&lemirue.event.listen(e,"orientationchange",i)}},lemirue.on.resizeEnd=function(e,t){if(e===window){0==lemirue.object.keyExists(e,"lemirue")&&(e.lemirue={}),void 0===e.lemirue.resizeend&&(e.lemirue.resizeend={handler:[],timer:null}),e.lemirue.resizeend.handler.push(t);var r=200,i=function(t){clearTimeout(e.lemirue.resizeend.timer),e.lemirue.resizeend.timer=setTimeout(function(){lemirue.forRange(0,e.lemirue.resizeend.handler.length,function(r){e.lemirue.resizeend.handler[r].call(e,t)})},r)};lemirue.event.listen(e,"resize",i),"ontouchstart"in window&&lemirue.event.listen(e,"orientationchange",i)}},lemirue.on.touchDrag=function(e,t){0==lemirue.object.keyExists(e,"lemirue")&&(e.lemirue={}),void 0===e.lemirue.touchdrag&&(e.lemirue.touchdrag={isStart:!1,handler:[],timer:null,startX:0,startY:0,pageX:0,pageY:0,distanceX:0,distanceY:0,movementX:0,movementY:0}),e.lemirue.touchdrag.handler.push(t);var r="ontouchstart"in window,i=function(e){return void 0===e?"":(0>e&&(e=360-Math.abs(e)),e>=0&&30>=e||360>=e&&e>=330?"right":e>=150&&210>=e?"left":e>210&&330>e?"up":"down")},n=function(t,r){var n,l,u,o=t;lemirue.object.keyExists(o,"changedTouches")&&(o=o.changedTouches[0]),n=o.pageX,l=o.pageY,0===r?(e.lemirue.touchdrag.startX=n,e.lemirue.touchdrag.startY=l):1===r&&(e.lemirue.touchdrag.movementX=Math.abs(Math.abs(e.lemirue.touchdrag.pageX)-Math.abs(n)),e.lemirue.touchdrag.movementY=Math.abs(Math.abs(e.lemirue.touchdrag.pageY)-Math.abs(l))),u=lemirue.math.getAngleByPoint(e.lemirue.touchdrag.startX,e.lemirue.touchdrag.startY,n,l),e.lemirue.touchdrag.distanceX=n-e.lemirue.touchdrag.startX,e.lemirue.touchdrag.distanceY=l-e.lemirue.touchdrag.startY,e.lemirue.touchdrag.pageX=n,e.lemirue.touchdrag.pageY=l,o.touchdrag={sequence:r,startX:e.lemirue.touchdrag.startX,startY:e.lemirue.touchdrag.startY,pageX:n,pageY:l,distanceX:e.lemirue.touchdrag.distanceX,distanceY:e.lemirue.touchdrag.distanceY,movementX:e.lemirue.touchdrag.movementX,movementY:e.lemirue.touchdrag.movementY,direction:i(u)},lemirue.forRange(0,e.lemirue.touchdrag.handler.length,function(t){e.lemirue.touchdrag.handler[t].call(e,o)})},l=function(t){r===!0&&void 0!=t.which&&0!==t.which||(e.lemirue.touchdrag.isStart=!0,n.call(e,t,0))},u=function(t){r===!0&&void 0!=t.which&&0!==t.which||e.lemirue.touchdrag.isStart===!1||n.call(e,t,1)},o=function(t){r===!0&&void 0!=t.which&&0!==t.which||e.lemirue.touchdrag.isStart===!1||(n.call(e,t,2),e.lemirue.touchdrag.isStart=!1)};lemirue.event.listen(e,"mousedown",l),lemirue.event.listen(e,"mousemove",u),lemirue.event.listen(e,"mouseup",o),lemirue.event.listen(e,"mouseleave",o),lemirue.event.listen(e,"blur",o),r===!0&&(lemirue.event.listen(e,"touchstart",l),lemirue.event.listen(e,"touchmove",u),lemirue.event.listen(e,"touchend",o),lemirue.event.listen(e,"touchcancel",o))},lemirue.on.unscroll=function(e){var t=function(e){e.preventDefault()};lemirue.event.listen(e,lemirue.browser.getWheelEventName(),t),"ontouchstart"in window&&lemirue.event.listen(e,"touchmove",t)},lemirue.on.mediaQuery=function(e,t,r){var i,n=e.matchMedia(r),l=function(){var r=n.matches?0:1;r!==i&&(t.call(e,r),i=r)};n.addListener(l),lemirue.event.listen(e,"load",l),"ontouchstart"in window&&window.matchMedia("(orientation: portrait)").addListener(l)},lemirue.template={},lemirue.template.getInlines=function(e){return e.match(new RegExp("{{(.*?)}}","ig"))},lemirue.template.evalInlines=function(e,t){var r,i,n=0;if(null===(r=lemirue.template.getInlines(e)))return e;for(;i=r[n];n++)e=e.replace(i,lemirue.template.evalInline(i,t));return e},lemirue.template.evalInline=function(e,t){var r,i="";if(e=lemirue.template.trimInline(e),void 0!==(r=lemirue.template.getInlineFilter(e))&&(e=r.trimmedInline),i=lemirue.string.evalCode(e,t),void 0!==r)switch(r.type){case"e":i=encodeURIComponent(i)}return i},lemirue.template.trimInline=function(e){return e=e.substring(2,e.length-2),e=lemirue.string.trim(e)},lemirue.template.removeTemplateSyntax=function(e){return e.replace(new RegExp("{{.*?}}","ig"),"").replace(new RegExp("{%.*?%}","ig"),"")},lemirue.template.getInlineFilter=function(e){var t=e.match(new RegExp("\\s*\\|\\s*(e)\\s*"));return null!==t?(e=e.replace(t[0],""),{type:RegExp.$1,trimmedInline:e}):void 0},lemirue.template.getBlockByName=function(e,t){var r,i,n,l,u=lemirue.template.getBlockClose(e,t),o=e.substring(0,u.index);return void 0!==(l=lemirue.template.getBlockOpen(o,t))?(""===u.block&&(u.index=l.index+l.block.length),r=e.substring(0,l.index),i=e.substring(l.index+l.block.length,u.index),n=e.substring(u.index+u.block.length,e.length),{before:r,middle:i,after:n,attribute:l.attribute,open:l.block}):void 0},lemirue.template.getBlockOpen=function(e,t){var r,i,n=lemirue.string.build("{%\\s*",t," *(.*?)\\s*%}");return null===(i=e.match(new RegExp(n,"ig")))?void 0:(i=i.pop().toString(),r=RegExp.$1,""!==r&&(r=r.replace("&amp;","&"),r=r.replace("&gt;",">"),r=r.replace("&lt;","<")),{block:i,index:e.lastIndexOf(i),attribute:r})},lemirue.template.getBlockClose=function(e,t){var r,i=lemirue.string.build("{%\\s*end",t,"\\s*%}");return null===(r=e.match(new RegExp(i,"i")))?{index:e.length,block:""}:{index:r.index,block:r.toString()}},lemirue.template.evalBlock=function(e,t,r,i){switch(t){case"if":return lemirue.template.evalIf(e,r);case"switch":return lemirue.template.evalSwitch(e,r);case"for":return lemirue.template.evalFor(e,r);case"set":return lemirue.template.evalSet(e,r);case"include":return lemirue.template.evalInclude(e,r,i);case"extends":return lemirue.template.evalExtends(e,r,i)}},lemirue.template.evalExtends=function(e,t,r,i){var n=lemirue.template.getBlockByName(e,"extends");if(void 0===i)var i=[];void 0===n?i.length>0?(i.push(e),"function"===lemirue.getType(r)&&r(lemirue.template.evalExtendsBlock(i))):"function"===lemirue.getType(r)&&r(e):lemirue.template.loadExtendsFile(n,t,r,i)},lemirue.template.loadExtendsFile=function(e,t,r,i){var n="";i.push(lemirue.string.build(e.before,e.after)),lemirue.net.ajax({url:lemirue.string.evalCode(e.attribute,t)}).done(function(e){n=e.responseText}).fail(function(){}).always(function(){lemirue.template.evalExtends(n,t,r,i)})},lemirue.template.evalExtendsBlock=function(e){if(1===e.length)return e[0];for(var t,r,i=lemirue.template.convertExtendsCodeListToBlockMap(e),n=e.pop();t=lemirue.template.getBlockByName(n,"block");)r=lemirue.string.evalCode(t.attribute),n=lemirue.string.build(t.before,i[r]||"",t.after);return n},lemirue.template.convertExtendsCodeListToBlockMap=function(e){var t,r,i,n,l=0,u=e.length,o={},a=new RegExp("{{\\s*super\\s*}}","ig");for(e=lemirue.array.clone(e),e.reverse();u>l;l++)for(t=e[l];r=lemirue.template.getBlockByName(t,"block");)t=lemirue.string.build(r.before,r.after),i=lemirue.string.evalCode(r.attribute),n=r.middle,lemirue.object.keyExists(o,i)===!0&&(n=n.replace(a,o[i])),o[i]=n;return o},lemirue.template.evalInclude=function(e,t,r){var i=lemirue.template.getBlockByName(e,"include");void 0===i&&"function"===lemirue.getType(r)?r(e):lemirue.template.loadIncludeFile(i,t,r)},lemirue.template.loadIncludeFile=function(e,t,r){var i="";lemirue.net.ajax({url:lemirue.string.evalCode(e.attribute,t)}).done(function(e){i=e.responseText}).fail(function(){}).always(function(){lemirue.template.evalInclude(lemirue.string.build(e.before,i,e.after),t,r)})},lemirue.template.evalSet=function(e,t){for(var r;r=lemirue.template.getBlockByName(e,"set");)r.attribute.indexOf(" = ")>-1&&(t=lemirue.template.evalSetValue(r.attribute,t)),e=lemirue.string.build(r.before,r.after);return t},lemirue.template.evalSetValue=function(e,t){e=e.split("=");var r=lemirue.string.trim(e[0]),i=lemirue.string.trim(e[1]);return void 0===(t[r]=lemirue.string.evalCode(i,t))&&(t[r]=i),t},lemirue.template.evalFor=function(e,t){for(var r;r=lemirue.template.getBlockByName(e,"for");)e=r.attribute.indexOf(" in ")<0?lemirue.string.build(r.before,r.after):lemirue.string.build(r.before,lemirue.template.evalForIn(r,t),r.after);return e},lemirue.template.evalForIn=function(e,t){var r,i=e.attribute.split(" in "),n=lemirue.string.trim(i[0]),l=lemirue.string.trim(i[1]),u=lemirue.template.getForInRangeValue(l),o=0,a=[];if(void 0!==u?void 0===(l=lemirue.string.evalCode(u,t))&&(l=Number(u)):l=lemirue.string.evalCode(l,t),lemirue.isNumeric(l)===!0){for(;l>o;o++)a.push(lemirue.template.evalForInInline(e.middle,n,o,o,l,t));return a.join("")}if(lemirue.isArray(l)===!0){for(r=l.length;r>o;o++)a.push(lemirue.template.evalForInInline(e.middle,n,l[o],o,r,t));return a.join("")}if("object"===lemirue.getType(l)){r=lemirue.object.getLength(l);for(var m in l)a.push(lemirue.template.evalForInInline(e.middle,n,l[m],o,r,t)),o+=1;return a.join("")}return""},lemirue.template.getForInRangeValue=function(e){var t=e.match(new RegExp("\\s*range\\s*\\(\\s*(.*?)\\s*\\)","i"));if(null!==t)return lemirue.string.trim(RegExp.$1)},lemirue.template.evalForInInline=function(e,t,r,i,n,l){return l=lemirue.object.merge({index:i,count:i+1,lastIndex:n-i-1,lastCount:n-i,first:0===i,last:i===n-1,odd:i%2!==0,even:i%2===0},l),l[t]=r,lemirue.template.evalInlines(e,l)},lemirue.template.evalSwitch=function(e,t){for(var r;r=lemirue.template.getBlockByName(e,"switch");)e=lemirue.string.build(r.before,lemirue.template.evalCase(r,t),r.after);return e},lemirue.template.evalCase=function(e,t){for(var r,i,n=e.middle,l=lemirue.string.evalCode(e.attribute,t);r=lemirue.template.getBlockByName(n,"case");){if(lemirue.string.evalCode(r.attribute,t)==l)return r.middle;n=lemirue.string.build(r.before,r.after)}return i=lemirue.template.getBlockByName(n,"default"),void 0!==i?i.middle:""},lemirue.template.evalIf=function(e,t){for(var r;r=lemirue.template.getBlockByName(e,"if");)e=lemirue.string.build(r.before,lemirue.template.evalElif(r,t),r.after);return e},lemirue.template.evalElif=function(e,t){var r=e.middle,i=lemirue.string.evalCode(e.attribute,t),n=lemirue.template.getBlockByName(r,"elif"),l=lemirue.template.getBlockByName(r,"else");if(void 0===n&&void 0===l)return i===!0?r:"";if(void 0!==l&&(r=l.before),void 0===n)return i===!0?l.before:l.after;for(var u=void 0;n=lemirue.template.getBlockByName(r,"elif");)lemirue.string.evalCode(n.attribute,t)===!0&&(u=n.after),r=n.before;return i===!0?r:void 0!==u?u:void 0!==l?l.after:""};
+try{lemirue.jQuery={}}catch(e){var lemirue={jQuery:{}}}lemirue.jQuery.extend=function(){if(void 0!==jQuery){var e=arguments[0],t=arguments[1];jQuery.fn[e]=function(){for(var r=this,i=arguments[0],o=Array.prototype.slice.call(arguments,1),u=0,l=r.length;l>u;u++){if("object"!=typeof i&&void 0!==i)return r[u][e][i].apply(r[u][e],o);r[u][e]=new t(r[u],i)}return r},void 0!==arguments[2]&&(jQuery[e]=arguments[2])}},lemirue.jQuery.object=function(e,t){this.jqryObj=e,this.element=e.get(0),this.options={},void 0!==t&&(this.options=t)},lemirue.jQuery.object.prototype.getJQueryObj=function(){return this.jqryObj},lemirue.jQuery.object.prototype.getElement=function(){return this.element},lemirue.jQuery.object.prototype.getOptions=function(){return this.options},jQuery.fn.lemirue=function(e){return new lemirue.jQuery.object(this,e)},lemirue.jQuery.object.prototype.on=function(e,t){var r=this.getElement(),i=this.getOptions();switch(e){case"tap":lemirue.on.tap(r,t);break;case"scrollthreshold":lemirue.on.scrollThreshold(r,t,i);break;case"resizethreshold":lemirue.on.resizeThreshold(r,t,i);break;case"resizeend":lemirue.on.resizeEnd(r,t);break;case"touchdrag":lemirue.on.touchDrag(r,t);break;case"unscroll":lemirue.on.unscroll(r);break;case"mediaquery":lemirue.on.mediaQuery(r,t,i)}return this.getJQueryObj()},lemirue.jQuery.object.prototype.template=function(e,t){var r=void 0,i=this.getElement(),o=this.getJQueryObj(),u=o.html(),l=this.getOptions(),n=function(e){o.html(e),void 0!==t&&t.call(i,e)};switch(e){case"for":r=lemirue.template.evalFor(u,l);break;case"if":r=lemirue.template.evalIf(u,l);break;case"switch":r=lemirue.template.evalSwitch(u,l);break;case"set":lemirue.template.evalSet(u,l);break;case"include":lemirue.template.evalInclude(u,l,n);break;case"extends":lemirue.template.evalExtends(u,l,n)}return void 0!==r&&"include"!==e&&"extends"!==e&&o.html(r),o};
+
+// ============================================================
+// PC用メニューのボタン状態切り替え
+// ============================================================
+lemirue.jQuery.extend( "menuActivitySwitcher", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$buttons: undefined,
+		urlData: {},
+	}, options );
+	var on = {
+		/* ----- 初期化 ----- */
+		init: function () {
+			// ボタンを全て得る
+			vars.$buttons = vars.$self.find( ".sqex-large-menu-button" );
+			var url = location.href;
+			var urlList;
+			var k, i, l;
+			for ( k in vars.urlData ) {
+				urlList = vars.urlData[ k ];
+				i = 0;
+				l = urlList.length;
+				for ( ; i < l; i++ ) {
+					// URLリスト内のURLと、locationの内容が一致した
+					if ( url.indexOf( urlList[ i ] ) > -1 ) {
+						self.setActive( k );
+						return;
+					}
+				}
+			}
+		}
+	}
+	// 指定したdata-nameをもつボタンをアクティブに
+	self.setActive = function ( name ) {
+		var selector = lemirue.string.sprintf( "[data-name=%s]", name );
+		vars.$buttons.filter( selector ).addClass( "active" );
+	}
+	/* ----- 初期化 ----- */
+	on.init.call( element );
+} );
+
+// ============================================================
+// スマホメニュー
+// ============================================================
+lemirue.jQuery.extend( "menu", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$win: $( window ),
+		$wrap: undefined,
+		$slider: undefined,
+		$dragger: undefined,
+		$main: undefined,
+		open: $.noop,
+		complete: $.noop,
+		cleanup: $.noop,
+		closed: $.noop,
+		vanish: $.noop,
+		standby: $.noop,
+		className: "sqex-small-menu-wrap",
+		isEnabled: true,
+		status: 3,
+		cssProps: {
+			overflow: "hidden", 
+			position: "relative"
+		}
+	}, options );
+	var on = {
+		// ----- 初期化 -----
+		init: function () {
+			// メニューエリアを得る
+			vars.$main = vars.$self.find( ".sqex-small-menu-content" );
+			// ラッパーを初期化
+			vars.$wrap = $( "<div/>" ).addClass( vars.className )
+				.css( vars.cssProps )
+				.lemirue().on( "unscroll" );
+			// ドラッグエリアの初期化
+			vars.$dragger = $( "<div/>" ).menuDragger();
+			// スライドエリアの初期化
+			vars.$slider = $( "<div/>" ).menuSlider( {
+				open: on.open,
+				complete: on.complete,
+				cleanup: on.cleanup,
+				closed: on.closed,
+				vanish: on.vanish
+			} );
+			// メニューをスライダーとドラッガーでラップする
+			vars.$self.append( vars.$wrap );
+			vars.$wrap.append( vars.$slider );
+			vars.$slider.append( vars.$dragger );
+			vars.$dragger.append( vars.$main );
+			// デフォルトで非表示状態だったメニューを表示に
+			vars.$main.show();
+		},
+		open: function () {
+			self.isEnabled( false );
+			self.setStatus( 0 );
+			// ラッパーの高さを変更
+			var winH = vars.$win.height();
+			vars.$wrap.height( winH );
+			vars.$main.height( winH );
+			vars.open.call( element );
+		},
+		complete: function () {
+			self.isEnabled( true );
+			self.setStatus( 1 );
+			vars.complete.call( element );
+		},
+		cleanup: function () {
+			self.isEnabled( false );
+			self.setStatus( 2 );
+			vars.cleanup.call( element );
+		},
+		closed: function () {
+			self.isEnabled( true );
+			self.setStatus( 3 );
+			// ラッパーの高さを変更
+			vars.$wrap.height( "auto" );
+			vars.closed.call( element );
+		},
+		vanish: function () {
+			self.isEnabled( true );
+			self.setStatus( 3 );
+			// ラッパーの高さを変更
+			vars.$wrap.height( "auto" );
+			vars.vanish.call( element );
+		},
+		standby: function () {
+			self.isEnabled( true );
+			self.setStatus( 3 );
+			// ラッパーの高さを変更
+			vars.$wrap.height( "auto" );
+			vars.standby.call( element );
+		}
+	}
+	// ===== 開く =====
+	self.open = function () {
+		vars.$slider.menuSlider( "open" );
+	}
+	// ===== 閉じる =====
+	self.close = function () {
+		vars.$slider.menuSlider( "close" );
+	}
+	// ===== メニュー使用準備完了状態 =====
+	self.standby = function () {
+		on.standby();
+	}
+	// ===== すぐに消す =====
+	self.vanish = function () {
+		vars.$slider.menuSlider( "vanish" );
+	}
+	// ===== ステータスを返す =====
+	self.getStatus = function () {
+		return vars.status;
+	}
+	// ===== ステータスのセット =====
+	// 0 open, 1 complete, 2 cleanup, 3 closed
+	self.setStatus = function ( status ) {
+		vars.status = status;
+	}
+	// ===== メニューの有効無効フラグを返す =====
+	self.isEnabled = function ( isEnabled ) {
+		if ( isEnabled !== undefined ) {
+			vars.isEnabled = isEnabled;
+		}
+		return vars.isEnabled;
+	}
+	// 初期化
+	on.init();
+} );
+
+// ============================================================
+// スマホメニュースライダー
+// ============================================================
+lemirue.jQuery.extend( "menuSlider", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$win: $( window ),
+		$doc: $( document ),
+		$slider: undefined,
+		$main: undefined,
+		open: $.noop,
+		complete: $.noop,
+		cleanup: $.noop,
+		closed: $.noop,
+		vanish: $.noop,
+		className: "sqex-small-menu-slider",
+		cssProps: {
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: "100%"
+		},
+		openProps: {
+			delay: 200,
+			duration: 300,
+			easing: "ease-in",
+			complete: function () {
+				on.complete();
+			}
+		},
+		closeProps: {
+			duration: 300,
+			easing: "ease-out",
+			complete: function () {
+				vars.$self.hide();
+				on.closed();
+			}
+		}
+	}, options );
+	var on = {
+		// ----- 初期化 -----
+		init: function () {
+			vars.$self.addClass( vars.className ).css( vars.cssProps );
+		},
+		open: function () {
+			vars.open.call( element );
+		},
+		complete: function () {
+			vars.complete.call( element );
+		},
+		cleanup: function () {
+			vars.cleanup.call( element );
+		},
+		closed: function () {
+			vars.closed.call( element );
+		},
+		vanish: function () {
+			vars.vanish.call( element );
+		}
+	}
+	// ===== スライド表示する =====
+	self.open = function () {
+		on.open();
+		vars.$self.show();
+		vars.$self
+			.velocity( { translateX: vars.$self.width() * -1 }, { duration: 0 } )
+			.velocity( { translateX: 0 }, vars.openProps );
+	}
+	// ===== スライドクローズする =====
+	self.close = function () {
+		on.cleanup();
+		vars.$self.velocity( { 
+			translateX: vars.$self.width() * -1 
+		}, vars.closeProps );
+	}
+	// ===== 表示のリセット =====
+	self.vanish = function () {
+		vars.$self.hide();
+		on.vanish();
+	}
+	// ----- 初期化 -----
+	on.init();
+} );
+
+// ============================================================
+// スマホメニュードラッガー
+// ============================================================
+lemirue.jQuery.extend( "menuDragger", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$win: $( window ),
+		className: "sqex-small-menu-dragger",
+		startY: 0,
+		nextY: 0,
+		cssProps: {
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: "100%"
+		}
+	}, options );
+	var on = {
+		// ----- 初期化 -----
+		init: function () {
+			vars.$self.addClass( vars.className ).css( vars.cssProps );
+			vars.$self.lemirue().on( "unscroll" );
+			vars.$self.lemirue().on( "touchdrag", on.touchDrag );
+		},
+		// ----- ドラッグ操作 -----
+		touchDrag: function ( evt ) {
+			var e = evt.touchdrag;
+			switch ( e.sequence ) {
+				// ----- スライド開始 -----
+				case 0:
+					// スライドの開始座標を保存
+					vars.startY = 0;
+				break;
+				// ----- スライド中 -----
+				case 1:
+					vars.nextY = vars.startY + e.distanceY;
+					vars.$self.velocity( { translateY: vars.nextY }, {
+						duration: 0
+					} );
+				break;
+				// ----- スライド終了 -----
+				case 2:
+					var h = vars.$self.height();
+					var winH = vars.$win.height();
+					// スライダーのY座標が初期位置より下になった場合
+					if ( vars.nextY > 0 ) {
+						vars.$self.velocity( { translateY: 0 }, {
+							duration: 100
+						} );
+					}
+					// スライダーの末端がウィンドウの末端からはみ出た場合
+					else if ( h - vars.nextY * -1 < winH ) {
+						var y = ( h - winH ) * -1;
+						if ( y > 0 ) {
+							y = 0;
+						}
+						vars.$self.velocity( { translateY: y }, {
+							duration: 100
+						} );
+					}
+				break;
+			}
+		}
+	}
+	// ----- 初期化 -----
+	on.init();
+} );
+
+// ============================================================
+// スマホメニューオーバーレイ
+// ============================================================
+lemirue.jQuery.extend( "menuOverlay", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$win: $( window ),
+		$doc: $( document ),
+		open: $.noop,
+		complete: $.noop,
+		cleanup: $.noop,
+		closed: $.noop,
+		vanish: $.noop,
+		bgColor: "#000",
+		opacity: 0.8,
+		duration: 500
+	}, options );
+	var on = {
+		// ----- 初期化 -----
+		init: function () {
+			// カラーコードをRGBに変換
+			var rgb = lemirue.math.colorCodeToRGB( vars.bgColor );
+			// CSS用のRGBA値を作成
+			var cssRGBA = lemirue.string.sprintf( "rgba(%d,%d,%d,%d)", rgb.r, rgb.g, rgb.b, vars.opacity );
+			// オーバーレイの背景色を設定
+			vars.$self.css( { 
+				backgroundColor: cssRGBA, 
+				position: "fixed",
+				top: 0,
+				left: 0,
+				width: "100%"
+			} );
+			// オーバーレイのスクロールを無効にする
+			vars.$self.lemirue().on( "unscroll" );
+		},
+		// ----- 開く -----
+		open: function () {
+			vars.open.call( element );
+		},
+		// ----- 開いた -----
+		complete: function () {
+			vars.complete.call( element );
+		},
+		// ----- 閉じる -----
+		cleanup: function () {
+			vars.cleanup.call( element );
+		},
+		// ----- 閉じた -----
+		closed: function () {
+			vars.closed.call( element );
+		}
+	}
+	// ===== オーバーレイ開く =====
+	self.open = function () {
+		var w = vars.$win.width();
+		var h = vars.$doc.height();
+		vars.$self
+			.css( { opacity: 0, height: h } )
+			.show()
+			.velocity( {
+				opacity: 1
+			}, {
+				duration: vars.duration,
+				begin: function () {
+					on.open();
+				},
+				complete: function () {
+					on.complete();
+				}
+			} );
+	}
+	// ===== オーバーレイ閉じる =====
+	self.close = function () {
+		vars.$self
+			.velocity( {
+				opacity: 0
+			}, {
+				duration: vars.duration,
+				begin: function () {
+					on.cleanup();
+				},
+				complete: function () {
+					vars.$self.hide();
+					on.closed();
+				}
+			} );
+	}
+	// ===== すぐに消す =====
+	self.vanish = function () {
+		vars.$self.hide();
+	}
+	// 初期化
+	on.init();
+} );
+
+// ============================================================
+// スマホメニュー開閉ボタン
+// ============================================================
+lemirue.jQuery.extend( "menuButton", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element )
+	}, options );
+	self.open = function () {
+		vars.$self.removeClass( "closed" ).addClass( "open" );
+	}
+	self.close = function () {
+		vars.$self.removeClass( "open" ).addClass( "closed" );
+	}
+	// ===== すぐに消す =====
+	self.vanish = function () {
+		vars.$self.removeClass( "open closed" );
+	}
+} );
+
+// ============================================================
+// フッターメニュー
+// ============================================================
+lemirue.jQuery.extend( "footer", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$naviMenu: undefined,
+		isMobile: undefined
+	} );
+	var on = {
+		// ----- 初期化 -----
+		init: function () {
+			vars.$naviMenu = vars.$self.find( ".sqex-footer-navi" );
+			// フッターメニューのタップ開閉初期化
+			vars.$naviMenu.footerSlideMenu( {
+				tap: on.tapFooter
+			} );
+		},
+		// ----- フッタのタップ -----
+		tapFooter: function ( evt ) {
+			if ( self.isMobile() == false ) {
+				return;
+			}
+			var $this = $( this );
+			if ( evt.visible == true ) {
+				$this.footerSlideMenu( "close" );
+			}
+			else {
+				$this.footerSlideMenu( "open" );
+			}
+		}
+	}
+	// ----- モバイル状態のセットゲット -----
+	self.isMobile = function ( isMobile ) {
+		if ( isMobile === undefined ) {
+			return vars.isMobile;
+		}
+		vars.isMobile = isMobile;
+	}
+	// ----- 状態のリセット -----
+	self.reset = function ( viewType ) {
+		var action = viewType === "large" ? "appear" : "vanish";
+		vars.$naviMenu.each( function () {
+			$( this ).footerSlideMenu( action );
+		} );
+	}
+	on.init.call( element );
+} );
+
+// ============================================================
+// スマホ状態でのフッタメニュー開閉
+// ============================================================
+lemirue.jQuery.extend( "footerSlideMenu", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		$toggle: null,
+		$main: null,
+		$slide: null,
+		$menu: null,
+		tap: $.noop,
+		speed: 200
+	}, options );
+	var on = {
+		// ----- 初期化 -----
+		init: function () {
+			// トグルボタンの初期化
+			vars.$toggle = vars.$self.find( ".sqex-footer-navi-h1" );
+			vars.toggleObj = vars.$toggle.get( 0 );
+			vars.toggleHam = new Hammer( vars.toggleObj );
+			// トグルボタンのタップ
+			vars.toggleHam.on( "tap", on.tap );
+			// メイン開閉エリアの初期化
+			vars.$main = vars.$self.find( ".sqex-footer-navi-main" );
+			// スライドの初期化
+			on.initSlide();
+		},
+		// ----- スライドの初期化 -----
+		initSlide: function () {
+			// スライドUP/DOWN用要素の初期化
+			vars.$slide = $( "<div/>" ).css( {
+				overflow: "hidden"
+			} );
+			// UP/DOWN要素を配置して、その中にmain要素を移動
+			vars.$main.before( vars.$slide );
+			vars.$slide.append( vars.$main );
+		},
+		// ----- クリック -----
+		tap: function () {
+			vars.tap.call( element, { 
+				visible: vars.$main.is( ":visible" ) } );
+		}
+	}
+	// ===== 開く =====
+	self.open = function () {
+		var h = vars.$main.show().height();
+		vars.$slide.height( 0 ).velocity( {
+			height: h
+		}, {
+			duration: vars.speed,
+			complete: function () {
+				vars.$slide.height( "auto" );
+			}
+		} );
+	}
+	// ===== 閉じる =====
+	self.close = function () {
+		vars.$slide.velocity( {
+			height: 0
+		}, {
+			duration: vars.speed,
+			complete: function () {
+				vars.$main.hide();
+				vars.$slide.height( "auto" );
+			}
+		} );
+	}
+	// ===== すぐに表示 =====
+	self.appear = function () {
+		vars.$main.show();
+	}
+	// ===== すぐに消す =====
+	self.vanish = function () {
+		vars.$main.hide();
+	}
+	// 初期化
+	on.init();
+} );
+
+// ============================================================
+// 「特約書店様へ」リンク表示
+// ============================================================
+lemirue.jQuery.extend( "magazinBusiness", function ( element, options ) {
+	var self = this;
+	var vars = $.extend( {
+		$self: $( element ),
+		urlData: [],
+	}, options );
+	var on = {
+		/* ----- 初期化 ----- */
+		init: function () {
+			var url = location.href;
+			if (location.hash !== "") url = url.substr(0, url.length - location.hash.length);
+			if (location.search !== "") url = url.substr(0, url.length - location.search.length);
+			var display = false;
+			for (var i = 0; i < vars.urlData.length; i++) {
+				if (url.match(vars.urlData[i]) !== null) {
+					display = true;
+					break;
+				}
+			}
+			if (!display) vars.$self.remove();
+		}
+	};
+	// 初期化
+	on.init();
+} );

@@ -1,0 +1,553 @@
+$(function () {
+
+    // 生放送CM表示数設定
+    var broadcastDisplayTypeOneCmTwoLive = 1;
+    var broadcastDisplayTypeTwoCmOneLive = 2;
+    var broadcastDisplayTypeAllCm = 3;
+    var broadcastDisplayTypeAllLive = 4;
+
+    /**
+     * トピックスHTML作成
+     *
+     * @param topic
+     */
+    var create_topic_html = function (topic) {
+        // テンプレート取得
+        var template = getTemplateHtml("js-topic-list-template");
+
+        // 画像
+        var topicImage = template.find(".js-topic-image");
+        if (topic.image) {
+            topicImage.attr("src", topic.image);
+            topicImage.attr("alt", topic.title);
+        } else {
+            topicImage.remove();
+        }
+
+        // アイコン
+        var topicIcon = template.find(".js-topic-icon");
+        topicIcon.attr("src", topic.icon);
+
+        // 日時
+        var topicDate = template.find(".js-topic-date");
+        topicDate.append(dateSeparateDot(topic.datetime));
+
+        // タイトル
+        var topicTitle = template.find(".js-topic-title");
+        topicTitle.append(topic.title);
+
+        // 公式サイト
+        var topicOfficialSite = template.find(".js-topic-official-site");
+        var topicLinkUrl = topic.link_uri;
+        if (topic.official_site && topicLinkUrl) {
+            topicOfficialSite.append(topic.official_site);
+            topicOfficialSite.attr("href", topicLinkUrl);
+            topicOfficialSite.attr("data-id", topic.id);
+        } else {
+            topicOfficialSite.append("<br>");
+        }
+
+        // 詳細
+        var jsTopicDetail = template.find(".js-topic-detail");
+        var topicImageLink = template.find(".js-topic-image-link");
+        if (topic.detail_link) {
+            jsTopicDetail.attr("href", topic.detail_link);
+            jsTopicDetail.attr("data-id", topic.id);
+            topicImageLink.attr("href", topic.detail_link);
+            topicImageLink.attr("data-id", topic.id);
+        } else {
+            jsTopicDetail.remove();
+        }
+
+        return template;
+    };
+
+    /**
+     * トピック一覧作成
+     *
+     * @param json
+     */
+    var create_topic_list = function (json) {
+        // トピックス一覧生成
+        if (json != null && json.topics) {
+            var topicList = $("#js-topic-list");
+            topicList.empty();
+            var index = 0;
+            json.topics.forEach(function (topic) {
+if (matchMedia('(max-width: 767px)').matches) {
+  // ウィンドウサイズが767px以下のとき
+                // 一覧表示するのは公開期限内のトピックス8件まで
+                if (index < 8 && !dateTimeExpired(topic.preferred_end_date)) {
+                    var html = create_topic_html(topic);
+                    // リスト追加
+                    topicList.append(html);
+                    index++;
+                }
+} else {
+  // それ以外
+                // 一覧表示するのは公開期限内のトピックス12件まで
+                if (index < 12 && !dateTimeExpired(topic.preferred_end_date)) {
+                    var html = create_topic_html(topic);
+                    // リスト追加
+                    topicList.append(html);
+                    index++;
+                }
+}
+            });
+        }
+
+        // トピック一覧高さ調整
+        matchHeight();
+    };
+
+    /**
+     * 重要なお知らせHTML作成
+     *
+     * @param information
+     */
+    var create_information_html = function (information) {
+        // テンプレート取得
+        var template = getTemplateHtml("js-list-news-template");
+
+        // ラベル
+        var informationLabel = template.find(".js-news-label");
+        informationLabel.append("お知らせ");
+
+        // 日時
+        var informationDate = template.find(".js-news-date");
+        informationDate.append(dateSeparateDot(information.datetime));
+
+        // タイトル
+        var informationTitle = template.find(".js-news-title");
+        informationTitle.append(information.title);
+
+        // 詳細
+        var informationLink = template.find(".js-news-link");
+        if (information.link_uri) {
+            informationLink.attr("href", information.link_uri);
+        } else if (information.detail_link) {
+            informationLink.attr("href", information.detail_link);
+        } else {
+            informationLink.attr("href", "");
+        }
+
+        return template;
+    };
+
+    /**
+     * 重要なお知らせ一覧作成
+     *
+     * @param json
+     */
+    var create_information_list = function (json) {
+        // 重要なお知らせ一覧生成
+        if (json != null && json.information) {
+            var informationList = $("#js-list-news");
+            informationList.empty();
+            json.information.forEach(function (information) {
+                if (!dateTimeExpired(information.preferred_end_date)) {
+                    var html = create_information_html(information);
+                    // リスト追加
+                    informationList.append(html);
+                }
+            });
+        }
+
+        // トピック一覧高さ調整
+        matchHeight();
+    };
+
+    /**
+     *  最新映像（生放送CM）エリアHTML作成
+     *
+     * @param json
+     */
+    var create_broadcast_area_brock_html = function (json) {
+        var broadCastLiveArea = $("#js-live-area");
+        var broadCastCMArea = $("#js-cm-area");
+
+        // デフォルト状態HTMLの該当箇所の情報を空にする。
+        broadCastLiveArea.empty();
+        broadCastCMArea.empty();
+
+        var allPublishBroadcastDataList = json.broadcast;
+        if (allPublishBroadcastDataList) {
+            var allPublishBroadcastLiveList = allPublishBroadcastDataList.live;
+            var allPublishBroadcastCMList = allPublishBroadcastDataList.cm;
+
+            // 生放送
+            if (allPublishBroadcastLiveList) {
+                var sortedBroadcastLiveKeyList = makeSortedBroadcastLiveKeyList(allPublishBroadcastLiveList);
+
+                // 生放送のHTMLブロックを追加
+                var liveHtml = "";
+                sortedBroadcastLiveKeyList.forEach(function (sortedBroadcastLiveKeyList) {
+                    var liveBroadcast = allPublishBroadcastLiveList[sortedBroadcastLiveKeyList.defaultSortKey];
+                    if (!dateTimeExpired(liveBroadcast.preferred_end_date)) {
+                        var html = create_broadcast_contents_block_html(liveBroadcast, "live");
+                        liveHtml += html.html();
+                    }
+                });
+                broadCastLiveArea.html(liveHtml);
+            } else {
+                // 生放送エリアを削除
+                broadCastLiveArea.remove();
+            }
+
+            //CM
+            if (allPublishBroadcastCMList) {
+                var cmHtml = "";
+                for (cmSortKey in allPublishBroadcastCMList) {
+                    if (allPublishBroadcastCMList.hasOwnProperty(cmSortKey)) {
+                        var allPublishBroadcastCM = allPublishBroadcastCMList[cmSortKey];
+                        if (!dateTimeExpired(allPublishBroadcastCM.preferred_end_date)) {
+                            var html = create_broadcast_contents_block_html(allPublishBroadcastCM, "cm");
+                            cmHtml += html.html();
+                        }
+                    }
+                }
+                broadCastCMArea.html(cmHtml);
+            } else {
+                // CMエリアを削除
+                broadCastCMArea.remove();
+            }
+        }
+    };
+
+    /**
+     * 生放送のキーを並び替えたリストを作成する
+     *
+     * @param allPublishBroadcastLiveList
+     * @returns {Array}
+     */
+    var makeSortedBroadcastLiveKeyList = function (allPublishBroadcastLiveList) {
+        // 現在日時をYYYYMMDDHHII形式で取得
+        var nowDateYYYYMMDDHHII = getNowDateYYYYMMDDHHII();
+        var sortedBroadcastLiveKeyList = [];
+
+        // 生放送開始日時が現在時刻と近い順でソートする為用のリストを作成する。
+        for (liveSortKey in allPublishBroadcastLiveList) {
+            if (allPublishBroadcastLiveList.hasOwnProperty(liveSortKey)) {
+                var broadCastLiveDetailList = allPublishBroadcastLiveList[liveSortKey];
+                if (broadCastLiveDetailList.broadcast_start_date !== undefined) {
+                    // 現在日時と放送開始日時の差分の絶対値
+                    var diffTime = parseInt(broadCastLiveDetailList.broadcast_start_date) - parseInt(nowDateYYYYMMDDHHII);
+
+                    // 現在日時と放送開始日時の差分の絶対値
+                    var absoluteValueDiffTime = Math.abs(diffTime);
+
+                    // 現在日時と放送開始日時の差分＋３桁のソートキー
+                    var absoluteValueDiffTimeAndSortKey = absoluteValueDiffTime + "" + liveSortKey;
+
+                    // 配列にソート用の情報を配列にする。
+                    var BroadcastLiveListKeyInformation = {nowSortKey: absoluteValueDiffTimeAndSortKey, defaultSortKey: liveSortKey};
+                    sortedBroadcastLiveKeyList.push(BroadcastLiveListKeyInformation);
+                }
+            }
+        }
+
+        // 現在のソートキーで並び替える
+        sortedBroadcastLiveKeyList.sort(function (a, b) {
+            if (parseInt(a.nowSortKey) < parseInt(b.nowSortKey))
+                return -1;
+            else if (a.nowSortKey === b.nowSortKey)
+                return 0;
+            else
+                return 1;
+        });
+
+        return sortedBroadcastLiveKeyList
+    };
+
+    /**
+     * 最新映像（生放送CM）コンテンツ（1データ）毎のブロック作成
+     *
+     * @param broadcast
+     * @param type
+     */
+    var create_broadcast_contents_block_html = function (broadcast, type) {
+        // テンプレート取得
+        var broadCastBlockTemplate = getTemplateHtml("js-broadcast-block-template");
+        var pcYoutube = broadCastBlockTemplate.find(".js-pc-youtube");
+        var spYoutube = broadCastBlockTemplate.find(".js-sp-youtube");
+
+        // 画像追加
+        pcYoutube.children("img").attr("data-lazy", broadcast.thumbnail_path);
+        spYoutube.children("img").attr("data-lazy", broadcast.thumbnail_path);
+
+        if (broadcast.publish_terminal_pc !== true) {
+            pcYoutube.addClass("no-display-pc");
+        }
+
+        if (broadcast.publish_terminal_sp !== true) {
+            spYoutube.addClass("no-display-sp");
+        }
+
+        // リンクURL
+        var broadCastLinkParameter = "?rel=0&amp;controls=0&amp;showinfo=0";
+        if (type === "live" && broadcast.end_flag === true) {
+            // 終了フラグにチェックがある生放送のみ、パラメーターに再生開始秒数を指定。
+            broadCastLinkParameter = "?rel=0&amp;showinfo=0&start=" + broadcast.broadcast_start_number_seconds;
+        }
+        var broadCastLinkUrl = broadcast.link_uri;
+        var reg = new RegExp('^https:\/\/youtu\.be\/(.*)$');
+        var matchUrl = broadCastLinkUrl.match(reg);
+        if (matchUrl && matchUrl.length === 2) {
+            broadCastLinkUrl = 'https://www.youtube.com/embed/' + matchUrl[1];
+        }
+        var movieUrl = broadCastLinkUrl + broadCastLinkParameter;
+        pcYoutube.attr("href", movieUrl);
+        spYoutube.children("img").attr("data-youtube", movieUrl);
+
+        // タイトル追加
+        var broadCastTitle = broadCastBlockTemplate.find(".js-broadcast-title");
+        broadCastTitle.append(broadcast.title);
+        return broadCastBlockTemplate;
+    };
+
+    /**
+     * フロント設定毎に、最新映像のコンテンツ表示を切り分ける。
+     *
+     * @param display_type
+     * @returns {boolean}
+     */
+    var changeBroadcastClassByDisplayType = function (display_type) {
+        var broadcastContents = $("#js-broadcast");
+        var checkType = true;
+        switch (display_type) {
+            case broadcastDisplayTypeOneCmTwoLive :
+                broadcastContents.addClass('cmOne-liveTwo');
+                break;
+            case broadcastDisplayTypeTwoCmOneLive :
+                broadcastContents.addClass('cmTwo-liveOne');
+                break;
+            case broadcastDisplayTypeAllCm :
+                broadcastContents.addClass('cmThree');
+                break;
+            case broadcastDisplayTypeAllLive :
+                broadcastContents.addClass('liveThree');
+                break;
+            default :
+                broadcastContents.empty();
+                checkType = false;
+        }
+        return checkType;
+    };
+
+    /** レスポンシブ対応　**/
+    var changeTerminal = function () {
+        if (isSpLayput()) {
+            // ブレイクポイント(SP)
+            $('.js-parent-item').each(function () {
+                if ($(this).children(".no-display-sp").length) {
+                    $(this).remove();
+                }
+            });
+        } else {
+            // ブレイクポイント(PC)
+            $('.js-parent-item').each(function () {
+                if ($(this).children(".no-display-pc").length) {
+                    $(this).remove();
+                }
+            });
+        }
+    };
+
+    /**
+     * トップメインビジュアルHTML作成
+     *
+     * @param topMainVisual
+     */
+    var createTopMainVisualHtml = function (topMainVisual) {
+        // テンプレート取得
+        var topMainVisualTemplate = getTemplateHtml("js-top-main-visual-template");
+
+        // HTML作成
+        if (isData(topMainVisual)) {
+            var pcMainVisual = topMainVisualTemplate.find('.js-pc-main-visual');
+            pcMainVisual.attr("href", topMainVisual.site_url);
+            pcMainVisual.attr("data-id", topMainVisual.data_id);
+            pcMainVisual.find("img").attr("src", topMainVisual.pc_main_visual_path);
+            pcMainVisual.find("img").attr("alt", topMainVisual.name);
+
+            var spMainVisual = topMainVisualTemplate.find('.js-sp-main-visual');
+            spMainVisual.attr("href", topMainVisual.site_url);
+            spMainVisual.attr("data-id", topMainVisual.data_id);
+            spMainVisual.find("img").attr("src", topMainVisual.sp_main_visual_path);
+            spMainVisual.find("img").attr("alt", topMainVisual.name);
+
+            var topMainVisualTitle = topMainVisualTemplate.find('.mv-ttl');
+            var topMainVisualTitleBtn = topMainVisualTitle.find("a");
+            topMainVisualTitleBtn.attr("href", topMainVisual.site_url);
+            topMainVisualTitleBtn.attr("data-id", topMainVisual.data_id);
+            if(topMainVisual.site_type == 1){
+                topMainVisualTitleBtn.find("img").attr("src", '/cmn/img/gameList/btn_officialsite.png');
+                topMainVisualTitleBtn.find("img").attr("art", '公式サイト');
+            }else{
+                topMainVisualTitleBtn.find("img").attr("src", '/cmn/img/btn_special.png');
+                topMainVisualTitleBtn.find("img").attr("art", '特設サイト');
+            }
+            topMainVisualTitle.find(".lst-mvttl-cap").text(topMainVisual.name);
+
+            var topMainVisualHtml = topMainVisualTemplate.find('.ac-moreinfo');
+            topMainVisualHtml.attr("data-id", topMainVisual.data_id);
+            topMainVisualHtml.html(topMainVisual.html_code);
+        }
+        return topMainVisualTemplate;
+    };
+
+    /**
+     * トップメインビジュアル作成
+     *
+     * @param topMainVisualList
+     */
+    var createTopMainVisual = function (topMainVisualList) {
+        // 生成したテンプレートリストをHTMLに適応
+        if (topMainVisualList != null && topMainVisualList.length != 0) {
+
+            // トップメインビジュアルエリアの情報を空にする。
+            $('#js-top-main-visual').empty();
+
+            $.each(topMainVisualList, function (index, topMainVisual) {
+                if (checkDisplayData(topMainVisual.preferred_end_date) === true) {
+                    var releaseTopMainVisualHtml = createTopMainVisualHtml(topMainVisual);
+                    $('#js-top-main-visual').append(releaseTopMainVisualHtml);
+                }
+            });
+        }else{
+            // トップメインビジュアルエリアを削除
+            $('.mv').remove();
+        }
+    };
+
+    /**
+     * カレンダー作成
+     *
+     * @param calendarList
+     */
+    var createCalendar = function (calendarList) {
+        if(calendarList) {
+            // 販売年月指定
+            $("#js-calendar-top-display-date").text(calendarList.top_display_date);
+
+            // カレンダー表示
+            $("#calendar-list").empty();
+            if (calendarList && calendarList.details) {
+                var calendarDetails = calendarList.details;
+                for (var calendarKey in calendarDetails) {
+                    var calendar = calendarDetails[calendarKey];
+                    if (isCalendarPreferredEnd(calendar.formatted_preferred_end_date)) {
+                        // 公開期限終了後は表示しない
+                        continue;
+                    }
+                    // カレンダーHTML作成
+                    var calendarTemplateHtml = getTemplateHtml("js-list-calendar-template");
+                    calendarTemplateHtml.find(".js-calendar-title").text(calendar.title);
+                    calendarTemplateHtml.find(".js-calendar-schedule-start-date").text(calendar.schedule_start_date);
+                    calendarTemplateHtml.find(".js-calendar-link").attr("href", getCalendarLinkUrl(calendar.link_url));
+                    calendarTemplateHtml.find(".js-calendar-link").attr("target", getCalendarTarget(calendar.target));
+                    calendarTemplateHtml.find(".js-calendar-image").attr("src", getCalendarImageUrl(calendar.image_url));
+
+                    var labelNames = calendar.label_names;
+                    for (var key in labelNames) {
+                        var calendarLabel = getTemplateHtml("js-calendar-label");
+                        calendarLabel.find(".js-calendar-pc-label").attr("src", "/cmn/img/label/mono/" + labelNames[key] + ".png");
+                        calendarLabel.find(".js-calendar-sp-label").attr("src", "/cmn/img/label/mono/" + labelNames[key] + "_sp.png");
+                        calendarTemplateHtml.find(".js-calendar-labels").append(calendarLabel);
+                    }
+                    $("#calendar-list").append(calendarTemplateHtml);
+                }
+            }
+        }
+    };
+
+    /********** 初期表示処理 **********/
+    // 初期読み込みローディング表示
+    loadingShow();
+
+    var preparationDisplay = function () {
+        if (loadTopics && loadInformation && loadBroadcast && loadTopMainVisual && loadCalendar) {
+            // 画面リフレッシュ
+            $(window).trigger('resize');
+
+            // cmnのtop.jsを再読み込み（スライダーの設定等）
+            $.getScript("/cmn/js/top.js");
+
+            // 初期読み込みローディング非表示
+            loadingHide();
+        }
+    };
+
+    var loadTopics = false;
+    var loadInformation = true;
+    var loadBroadcast = false;
+    var loadTopMainVisual = false;
+    var loadCalendar = false;
+
+    // 初期トピックス一覧読み込み
+    loadJson("/topics/list/data_top.json", function (json) {
+        // トピック一覧作成
+        create_topic_list(json);
+        loadTopics = true;
+        preparationDisplay();
+    });
+
+    // 初期重要なお知らせ一覧読み込み
+    loadJson("/contents/list/data_top.json", function (json) {
+        // 重要なお知らせ一覧作成
+        $.when(
+            create_information_list(json)
+        ).done(function () {
+            loadInformation = true;
+            preparationDisplay();
+        });
+    });
+
+    // 生放送CM読み込み
+    var createBroadcastCm = function (json) {
+        // 最新映像枠作成
+        var displayType = null;
+        if (json != null) {
+            displayType = json.display_type;
+        }
+        var changeBroadcastClass = changeBroadcastClassByDisplayType(displayType);
+        if (changeBroadcastClass === true) {
+            create_broadcast_area_brock_html(json);
+            changeTerminal();
+        }
+    };
+
+    // 初期生放送CM読み込み
+    loadJson("/contents/broadcast/data.json", function (json) {
+        // 最新映像枠作成
+        $.when(
+            createBroadcastCm(json)
+        ).done(function () {
+            loadBroadcast = true;
+            preparationDisplay();
+        });
+    });
+
+    // トップメインビジュアル読み込み
+    loadJson("/contents/top_main_visual/top_main_visual.json", function (json) {
+        // トップメインビジュアル作成
+        $.when(
+            createTopMainVisual(json)
+        ).done(function () {
+            loadTopMainVisual = true;
+            preparationDisplay();
+        });
+    });
+
+    // カレンダー作成
+    loadJson("/calendar/list/top.json", function (json) {
+        $.when(
+            createCalendar(json)
+        ).done(function () {
+            loadCalendar = true;
+            preparationDisplay();
+        });
+    });
+
+    /********** 初期表示処理 **********/
+});

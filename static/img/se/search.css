@@ -1,0 +1,112 @@
+.mt-site-search-form__button {
+  margin-left: 0.5em;
+}
+
+.mt-site-search-result-item {
+  margin: 1em 0;
+}
+
+.mt-site-search-result-item__link:hover .mt-site-search-result-item__label {
+  text-decoration: underline;
+}
+
+.mt-site-search__pagination ul {
+  margin: 0;
+  padding: 0;
+}
+
+.mt-site-search-pagination-item {
+  list-style: none;
+  display: inline-block;
+  padding: 0.2rem;
+}
+
+.mt-site-search-result-item__label__blogname::before {
+  content: ' - ';
+}
+
+.mt-site-search-result-item__url {
+  font-size: 0.8125rem;
+  color: #006621;
+}
+
+.mt-site-search-result-item__url cite {
+  font-style: normal;
+}
+
+.mt-site-search-result-item__excerpt {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.mt-site-search-result-container__modal {
+  border: none;
+  margin: auto;
+  border-radius: 1px;
+  overflow: auto;
+  height: 80%;
+  box-shadow: 0px 3px 10px rgba(34, 25, 25, 0.4);
+  border-collapse: separate;
+  background: white;
+  padding: 30px;
+  width: 70%;
+  position: fixed !important;
+  top: 5%;
+  left: 12%;
+  opacity: 0;
+  z-index: 100002;
+  visibility: hidden;
+  transition: opacity 0.25s linear;
+}
+
+.mt-site-search-result-container__modal__visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mt-site-search-result-background {
+  opacity: 0;
+  display: none;
+  position: fixed !important;
+  top: 0px;
+  left: 0px;
+  height: 130%;
+  width: 100%;
+  z-index: 100001;
+  background-color: white;
+  transition: opacity 0.25s linear;
+}
+
+.mt-site-search-result-background__visible {
+  opacity: 0.8;
+  display: block;
+}
+
+.mt-site-search-result-container__close {
+  float: right;
+  height: 12px;
+  width: 12px;
+  position: absolute !important;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.mt-site-search-filter-directories {
+  margin: 0.5em 0;
+}
+
+.mt-site-search-filter-directory {
+  display: inline /* for IE9 earlier */;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.2em;
+}
+
+.mt-site-search-filter-directory:last-child {
+  margin-right: 0;
+}
+
+.mt-site-search-filter-directory__label {
+  vertical-align: middle /* for IE9 earlier */;
+}

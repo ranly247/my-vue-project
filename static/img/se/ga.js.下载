@@ -1,0 +1,110 @@
+$(function () {
+
+    // メインビジュアル PC
+    $(document).on('click', "div.mv div.item > a", function () {
+        var img = $(this).find("img");
+        gtag('event', 'タイトル['+$(this).attr('data-id')+']', {'event_category': 'メインビジュアル','event_label': img.attr('alt')});
+    });
+    // メインビジュアル SP
+    $(document).on('click', "div.item > div.mv-forsp > a", function () {
+        var img = $(this).find("img");
+        gtag('event', 'タイトル['+$(this).attr('data-id')+']', {'event_category': 'メインビジュアル','event_label': img.attr('alt')});
+    });
+    // メインビジュアル 公式ボタン
+    $(document).on('click', ".mv-ttl a", function () {
+        var img = $(document).find("div.item.slick-current > div.mv-forsp.inlineSP > a img");
+        gtag('event', 'タイトル['+$(this).attr('data-id')+']', {'event_category': 'メインビジュアル','event_label': '公式サイトボタン'});
+    });
+
+    // メインビジュアル 下部 PC
+    $(document).on('click', "div.mv div.item > div.lo-mvcaption > dl > dd a", function () {
+        var img = $(this).find("img");
+        gtag('event', 'MORE INFO', {'event_category': 'メインビジュアル','event_label': $(this).parents('.ac-moreinfo').attr('data-id')+img.attr('alt'), 'event_value': $(this).attr('href')});
+    });
+    // メインビジュアル 下部 SP(YouTube)
+    $(document).on('click', "div.mv div.item div.lo-mvcaption div.youtube-sp", function () {
+        var img = $(this).find("img");
+        gtag('event', 'MORE INFO', {'event_category': 'メインビジュアル','event_label': $(this).parents('.ac-moreinfo').attr('data-id')+img.attr('alt'), 'event_value': $(this).find("iframe").attr('src')});
+    });
+
+    // 最新映像CM PC
+    $(document).on('click', "div.lo-vtr div.lt div.item a", function () {
+        gtag('event', 'CM', {'event_category': '最新映像','event_label': $(this).parent("div").find("h3").html()});
+    });
+    // 最新映像CM SP
+    $(document).on('click', "div.lo-vtr div.lt div.item div.youtube-sp", function () {
+        gtag('event', 'CM', {'event_category': '最新映像','event_label': $(this).parent("div").find("h3").html()});
+    });
+
+    // SQUARE ENIX CHANNELへ
+    $(document).find("div.lo-vtr div.lt > a").on('click', function () {
+        gtag('event', 'CM', {'event_category': '最新映像','event_label': 'SQUARE ENIX CHANNEL'});
+    });
+
+    // 最新映像生放送 PC
+    $(document).on('click', "div.lo-vtr div.rt div.item a", function () {
+        gtag('event', '生放送', {'event_category': '最新映像','event_label': $(this).parent("div").find("h3").html()});
+    });
+    // 最新映像生放送 SP
+    $(document).on('click', "div.lo-vtr div.rt div.item div.youtube-sp", function () {
+        gtag('event', '生放送', {'event_category': '最新映像','event_label': $(this).parent("div").find("h3").html()});
+    });
+
+    // SQUARE ENIX Presents JAPAN
+    $(document).find("div.lo-vtr div.rt a.lk-arw-lt").on('click', function () {
+        gtag('event', '生放送', {'event_category': '最新映像','event_label': 'SQUARE ENIX Presents JAPAN'});
+    });
+
+    // トピックス（記事リンク）
+    $(document).on('click', "#js-topic-list a.js-topic-detail", function () {
+        gtag('event', $(this).attr('data-id'), {'event_category': 'トピックス','event_label': $(this).attr('href')});
+    });
+
+    // トピックス（画像リンク）
+    $(document).on('click', "#js-topic-list a.js-topic-image-link", function () {
+        gtag('event', $(this).attr('data-id'), {'event_category': 'トピックス','event_label': '画像'});
+    });
+
+    // トピックス（公式サイトリンク）
+    $(document).on('click', "#js-topic-list a.js-topic-official-site", function () {
+        gtag('event', $(this).attr('data-id'), {'event_category': 'トピックス','event_label': $(this).attr('href')});
+    });
+
+    // スクウェア・エニックス 関連店舗
+    $(document).find("#shoplist ul a").on('click', function () {
+        gtag('event', $(this).find('h3').html(), {'event_category': '関連店舗','event_label': $(this).attr('href')});
+    });
+
+    // スクウェア・エニックス 関連サイト
+    $(document).find("#sitelist ul a").on('click', function () {
+        gtag('event', $(this).find('h3').html(), {'event_category': '関連サイト','event_label': $(this).attr('href')});
+    });
+
+    // 重要なお知らせ PC
+    $(document).on('click', "div.lo-2clm-relation div.main div.inlinePC div.cl-news ul li a", function () {
+        gtag('event', $(this).find("span.label-large").html(), {'event_category': '重要なお知らせ','event_label': $(this).attr('href')});
+    });
+    // 重要なお知らせ SP
+    $(document).on('click', "#news_forsp div ul li a", function(){
+        gtag('event', $(this).find("span.label-large").html(), {'event_category': '重要なお知らせ','event_label': $(this).attr('href')});
+    });
+
+    // ポータル・特設サイト PC
+    $(document).find("div.lo-2clm-relation div.main div.inlinePC div.cl-series ul li a").on('click', function () {
+        gtag('event', $(this).find('h3').html(), {'event_category': 'ポータル・特設サイト','event_label': $(this).attr('href')});
+    });
+    // ポータル・特設サイト SP
+    $(document).find("#series_forsp ul li a").on('click', function () {
+        gtag('event', $(this).find('h3').html(), {'event_category': 'ポータル・特設サイト','event_label': $(this).attr('href')});
+    });
+
+    // 発売スケジュール
+    $(document).on('click', "#calendar-list li a", function () {
+        gtag('event', $(this).find('p').html(), {'event_category': '発売スケジュール','event_label': $(this).attr('href')});
+    });
+
+    // e-STORE
+    $(document).on('click', "#estore-list li a", function () {
+        gtag('event', $(this).find('img').attr('alt'), {'event_category': 'e-STORE','event_label': $(this).attr('href')});
+    });
+});
