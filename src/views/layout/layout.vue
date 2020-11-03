@@ -3,6 +3,7 @@
         <el-header class="layoutHeader" height="48px">
             <label class="titleName">{{ $manageInfo.name }}</label>
             <label class="name">ranly</label>
+            <img @click="signOut" class="signoutImg" src="@/assets/icon_signout.png" alt="退出">
             <!-- <img @click="handleSignOut" class="signoutImg" src="@/assets/images/icon_signout.png" alt="退出"> -->
         </el-header>
         <el-container>
@@ -206,7 +207,7 @@ export default {
             }).catch(error => {
                 console.error(error.message)
             })
-        }
+        },
         // returnValue () {
         //     // let a = this.$route.params.name
         //     // this.userInfo.name = a
@@ -220,6 +221,15 @@ export default {
         //         this.$message.error('请先登录！')
         //     }
         // }
+        signOut () {
+            this.$axios.get('/logout').then(res => {
+                if (res.data === 1) {
+                    this.$router.push(this.$login)
+                    document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+                    this.$message.success('已退出登录！')
+                }
+            })
+        }
     }
 }
 </script>

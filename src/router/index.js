@@ -9,6 +9,7 @@ import Layout from '@/views/layout/layout'
 import Sale from '@/views/systemManage/saleManage/sale'
 import Estore from '@/views/systemManage/eStoreManage/estore'
 import Welcome from '@/views/welcome/welcome'
+import Account from '@/views/systemManage/accountManage/account'
 
 Vue.use(Router)
 
@@ -62,6 +63,10 @@ export default new Router({
                 path: '/welcome',
                 name: 'welcome',
                 component: Welcome
+            }, {
+                path: '/account',
+                name: 'account',
+                component: Account
             }]
         }
     ]
