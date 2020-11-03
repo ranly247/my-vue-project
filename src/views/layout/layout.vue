@@ -2,7 +2,7 @@
     <el-container class="layoutPage">
         <el-header class="layoutHeader" height="48px">
             <label class="titleName">{{ $manageInfo.name }}</label>
-            <label class="name">ranly</label>
+            <label class="name">{{ uname }}</label>
             <img @click="signOut" class="signoutImg" src="@/assets/icon_signout.png" alt="退出">
             <!-- <img @click="handleSignOut" class="signoutImg" src="@/assets/images/icon_signout.png" alt="退出"> -->
         </el-header>
@@ -70,84 +70,17 @@ export default {
         return {
             isCollapse: false,
             menus: [
-                {
-                    children: [
-                        {
-                            disabled: false,
-                            menuIcon: '',
-                            menuId: 11,
-                            menuName: 'banner',
-                            menuPath: 'banner',
-                            menuRemark: '“我是备注”',
-                            parentMenuId: 1
-                        }
-                    ],
-                    disabled: false,
-                    menuIcon: 'el-icon-location-information',
-                    menuId: 1,
-                    menuName: 'banner管理',
-                    menuPath: 'a',
-                    menuRemark: '',
-                    parentMenuId: 0
-                },
-                {
-                    children: [
-                        {
-                            disabled: false,
-                            menuIcon: '',
-                            menuId: 222,
-                            menuName: 'quick news',
-                            menuPath: 'news',
-                            menuRemark: '“我是备注”',
-                            parentMenuId: 22
-                        }
-                    ],
-                    disabled: false,
-                    menuIcon: 'el-icon-news',
-                    menuId: 22,
-                    menuName: '新闻管理',
-                    menuPath: 'b',
-                    menuRemark: '',
-                    parentMenuId: 0
-                },
-                {
-                    children: [
-                        {
-                            disabled: false,
-                            menuIcon: '',
-                            menuId: 3333,
-                            menuName: 'sale',
-                            menuPath: 'sale',
-                            menuRemark: '“我是备注”',
-                            parentMenuId: 333
-                        },
-                        {
-                            disabled: false,
-                            menuIcon: '',
-                            menuId: 33333,
-                            menuName: 'estore',
-                            menuPath: 'estore',
-                            menuRemark: '“我是备注”',
-                            parentMenuId: 333
-                        }
-                    ],
-                    disabled: false,
-                    menuIcon: 'el-icon-shopping-bag-1',
-                    menuId: 333,
-                    menuName: '商品管理',
-                    menuPath: 'c',
-                    menuRemark: '',
-                    parentMenuId: 0
-                }
+                // this.$banner,
+                // this.$news,
+                // this.$sale,
+                // this.$ranly
             ],
-            userInfo: {
-                name: ''
-            },
+            uname: '',
             routerViewHeight: 300
         }
     },
     created () {
-        // this.initMenu()
+        this.initMenu()
         // this.returnValue()
         this.routerViewHeight = (document.body.clientHeight - 220) > 300 ? (document.body.clientHeight - 220) : 300
     },
@@ -195,18 +128,34 @@ export default {
             })
         },
         initMenu () {
-            let userId = this.$route.params.userId
-            this.$apis.initMenu({
-                userId,
-                sid: 1
-            }).then(res => {
-                if (res.code === '2000') {
-                    this.menus = res.data.menus
-                    this.userInfo = res.data.userInfo
+            this.$axios.get('/queryMenu').then(res => {
+                if (res.data === 404) {
+                    this.$router.push(this.$login)
+                    this.$message.error(this.$error)
+                } else {
+                    console.log(res)
+                    this.uname = res.data[0].uname
+                    let arr = (res.data[0].permission || '').split('')
+                    for (let key in arr) {
+                        arr[key] === '1' ? this.menus.push(this.$banner) : (arr[key] === '2' ? this.menus.push(this.$news) : this.menus.push(this.$sale))
+                    }
+                    if (this.uname === 'ranly') {
+                        this.menus.push(this.$ranly)
+                    }
                 }
-            }).catch(error => {
-                console.error(error.message)
             })
+        //     let userId = this.$route.params.userId
+        //     this.$apis.initMenu({
+        //         userId,
+        //         sid: 1
+        //     }).then(res => {
+        //         if (res.code === '2000') {
+        //             this.menus = res.data.menus
+        //             this.userInfo = res.data.userInfo
+        //         }
+        //     }).catch(error => {
+        //         console.error(error.message)
+        //     })
         },
         // returnValue () {
         //     // let a = this.$route.params.name

@@ -1,44 +1,22 @@
 <template>
     <el-dialog
-        title="修改"
+        title="修改用户权限"
         :visible.sync="editVisible"
         width="30%"
         :before-close="handleClose"
         center
     >
         <el-form :model="form">
-            <el-form-item label="标题：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.title"/>
+            <el-form-item label="用户名：" :label-width="formLabelWidth" required>
+                {{ form.uname }}
             </el-form-item>
-            <el-form-item label="类型：" :label-width="formLabelWidth" required>
-                <el-select v-model="form.shoppingType" placeholder="请选择" size="mini">
-                    <el-option label="游戏" :value="1"></el-option>
-                    <el-option label="其他" :value="2"></el-option>
-                    <el-option label="杂志" :value="3"></el-option>
-                </el-select>
+            <el-form-item label="账号：" :label-width="formLabelWidth" required>
+                {{ form.uaccount }}
             </el-form-item>
-            <el-form-item label="封面：" :label-width="formLabelWidth" required>
-                <input type="file" accept="image/*" @change="uploadImg()" class="imgUpload"/>
-                <el-image
-                    style="width: 300px; height: 170px"
-                    :src="form.img"
-                    fit="contain"
-                />
-            </el-form-item>
-            <el-form-item label="价格：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.price"/>
-            </el-form-item>
-            <el-form-item label="上架日期：" :label-width="formLabelWidth" required>
-                <div class="block">
-                    <!-- <span class="demonstration">带快捷选项</span> -->
-                    <el-date-picker
-                    v-model="form.publishDay"
-                    align="right"
-                    type="date"
-                    placeholder="选择日期"
-                    :picker-options="pickerOptions">
-                    </el-date-picker>
-                </div>
+            <el-form-item label="权限：" :label-width="formLabelWidth" required>
+                <el-checkbox true-label="1" v-model="form.banner" name="banner">banner管理</el-checkbox>
+                <el-checkbox true-label="2" v-model="form.news" name="news">新闻管理</el-checkbox>
+                <el-checkbox true-label="3" v-model="form.sale" name="sale">商品管理</el-checkbox>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -54,25 +32,20 @@ export default {
         return {
             editVisible: false,
             form: {},
-            formLabelWidth: '100px',
-            pickerOptions: {
-                disabledDate (time) {
-                    return time.getTime() > Date.now()
-                },
-                shortcuts: [{
-                    text: '今天',
-                    onClick (picker) {
-                        picker.$emit('pick', new Date())
-                    }
-                }, {
-                    text: '昨天',
-                    onClick (picker) {
-                        const date = new Date()
-                        date.setTime(date.getTime() - 3600 * 1000 * 24)
-                        picker.$emit('pick', date)
-                    }
-                }]
-            }
+            formLabelWidth: '100px'
+            // menu: [{
+            //     id: 1,
+            //     menuName: 'banner',
+            //     value: '1'
+            // }, {
+            //     id: 2,
+            //     menuName: 'news',
+            //     value: '2'
+            // }, {
+            //     id: 3,
+            //     menuName: 'sale',
+            //     value: '3'
+            // }]
         }
     },
     props: {
@@ -86,7 +59,12 @@ export default {
         value (val) {
             this.editVisible = val
             this.form = {...this.dialogData}
-            // console.log(this.dialogData)
+            let arr = this.dialogData.permission
+            for (let key in arr) {
+                // arr[key] === 'banner,' ? this.form.banner = '1' : (arr[key] === 'news,' ? this.form.news = '2' : this.form.sale = '3')
+                arr[key] === 'banner,' ? this.form.banner = true : (arr[key] === 'news,' ? this.form.news = true : this.form.sale = true)
+                // arr[key] === 'banner,' ? this.form.arr.push(true) : (arr[key] === 'news,' ? this.form.arr.push(true) : this.form.arr.push(true))
+            }
         },
         editVisible (val) {
             this.$emit('input', val)
@@ -98,49 +76,16 @@ export default {
                 done()
             }).catch(_ => {})
         },
-        uploadImg () {
-            let img = document.querySelector('.imgUpload')
-            // console.log(img)
-            // console.log(img.files)
-            // console.log(this.fileList)
-            // let file = event.target.files[0]
-            let file = img.files[0]
-            // let file = this.fileList[0]
-            // console.log(file)
-            if (file) {
-                // let name = event.target.files[0].name
-                let name = file.name
-                let reader = new FileReader()
-                reader.onload = (event) => {
-                    let base64 = event.target.result
-                    let base64Data = base64.replace(/^data:image\/\w+;base64,/, '')
-                    // console.log('base64Data', base64Data)
-                    this.$axios.post('/src/main/upload', {
-                        name,
-                        file: base64Data
-                    }).then(res => {
-                        // console.log('url', res.data.result.url)
-                        let url = res.data.result.url
-                        this.form.img = url
-                    })
-                }
-                reader.readAsDataURL(file) // 将 Blob 或 File 对象转成base64
-            }
-        },
         submit () {
             let params = {
-                title: this.form.title,
-                shoppingType: this.form.shoppingType,
-                img: this.form.img,
-                price: this.form.price,
-                publishDay: this.form.publishDay,
-                ssid: this.form.ssid
+                permission: (this.form.banner || '') + (this.form.news || '') + (this.form.sale || ''),
+                usid: this.form.usid
             }
-            this.$axios.post('/updateSale', params).then(res => {
+            this.$axios.post('/updateUser', params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     this.$message.success('修改成功！')
-                    this.$parent.querySale()
+                    this.$parent.queryUser()
                     this.editVisible = false
                 }
             }).catch(error => {
