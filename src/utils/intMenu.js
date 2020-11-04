@@ -34,7 +34,7 @@ module.exports = {
                 }
             ],
             disabled: false,
-            menuIcon: 'el-icon-location-information',
+            menuIcon: 'el-icon-picture-outline',
             menuId: 1,
             menuName: 'banner管理',
             menuPath: 'a',

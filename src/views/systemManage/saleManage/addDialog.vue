@@ -8,7 +8,7 @@
         :before-close="handleClose"
         center
     >
-        <el-form :model="form">
+        <el-form :model="form" ref="form">
             <el-form-item label="标题：" :label-width="formLabelWidth" prop="title" :class="[errors.has('title') ? 'is-error' : '', 'is-required']">
                 <el-input
                     v-model="form.title"
@@ -92,7 +92,6 @@ export default {
             addVisible: this.show,
             form: {},
             formLabelWidth: '100px',
-            imgUrl: '',
             pickerOptions: {
                 disabledDate (time) {
                     return time.getTime() > Date.now()
@@ -153,7 +152,7 @@ export default {
                     }).then(res => {
                         // console.log('url', res.data.result.url)
                         let url = res.data.result.url
-                        this.imgUrl = url
+                        this.form.imgUrl = url
                     })
                 }
                 reader.readAsDataURL(file) // 将 Blob 或 File 对象转成base64
@@ -169,14 +168,14 @@ export default {
                         price: this.form.price,
                         publishDay: this.form.publishDay
                     }
-                    this.$axios.post('/addEstore', params).then(res => {
+                    this.$axios.post('/addSale', params).then(res => {
                         if (res.status === 200) {
                             this.$message.success('添加成功！')
                             this.$nextTick(() => {
                                 this.$refs['form'].resetFields()
                                 this.form.imgUrl = ''
                             })
-                            this.$parent.queryEstore()
+                            this.$parent.querySale()
                             this.addVisible = false
                         }
                     }).catch(error => {

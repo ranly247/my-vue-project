@@ -7,3 +7,9 @@
         <el-footer>Footer</el-footer>
     </el-container>
 </template>
+
+<script>
+export default {
+    name: 'officeWebsite'
+}
+</script>

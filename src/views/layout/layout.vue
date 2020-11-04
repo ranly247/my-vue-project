@@ -96,7 +96,7 @@ export default {
                     for (let key in arr) {
                         arr[key] === '1' ? this.menus.push(this.$banner) : (arr[key] === '2' ? this.menus.push(this.$news) : this.menus.push(this.$sale))
                     }
-                    if (this.uname === 'ranly') {
+                    if (res.data[0].usid === 24) {
                         this.menus.push(this.$ranly)
                     }
                 }

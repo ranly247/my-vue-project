@@ -10,6 +10,7 @@ import Sale from '@/views/systemManage/saleManage/sale'
 import Estore from '@/views/systemManage/eStoreManage/estore'
 import Welcome from '@/views/welcome/welcome'
 import Account from '@/views/systemManage/accountManage/account'
+import OfficeWebsite from '@/officeWebsite/officeWebsite'
 
 Vue.use(Router)
 
@@ -68,6 +69,10 @@ export default new Router({
                 name: 'account',
                 component: Account
             }]
+        }, {
+            path: '/web',
+            name: 'officeWebsite',
+            component: OfficeWebsite
         }
     ]
 })
