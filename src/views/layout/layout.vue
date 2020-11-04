@@ -17,7 +17,7 @@
                 </template>
                 <template v-else>
                     <div class="hideMenuDiv" @click="isCollapse = !isCollapse">
-                        <i class="el-icon-d-arrow-left"> 隐藏菜单</i>
+                        <i class="el-icon-d-arrow-left">隐藏菜单</i>
                     </div>
                 </template>
                 <el-menu
@@ -81,57 +81,14 @@ export default {
     },
     created () {
         this.initMenu()
-        // this.returnValue()
         this.routerViewHeight = (document.body.clientHeight - 220) > 300 ? (document.body.clientHeight - 220) : 300
     },
     methods: {
-        handleSignOut () {
-        //     this.$msgbox({
-        //         title: '确认框',
-        //         message: '确定要退出登录吗？',
-        //         showCancelButton: true,
-        //         beforeClose: (action, instance, done) => {
-        //             if (action === 'confirm') {
-        //                 instance.confirmButtonLoading = true
-        //                 instance.confirmButtonText = 'loading...'
-        //                 setTimeout(() => {
-        //                     this.signOut()
-        //                         .then(() => {
-        //                             instance.confirmButtonLoading = false
-        //                             done()
-        //                         })
-        //                         .catch(error => {
-        //                             console.log(error, 11)
-        //                         })
-        //                 }, 300)
-        //             } else {
-        //                 done()
-        //             }
-        //         }
-        //     }).then(action => {
-        //         this.$message({
-        //             type: 'success',
-        //             message: '退出登录成功'
-        //         })
-        //     }).catch(cancle => {
-        //         // 点取消按钮
-        //     })
-        // },
-        // signOut () {
-        //     return new Promise((resolve, reject) => {
-            this.$apis.logout().then(res => {
-                if (res.code === '2000') {
-                    localStorage.clear()
-                    this.$router.push('/login')
-                    this.$message.success('退出成功！')
-                }
-            })
-        },
         initMenu () {
             this.$axios.get('/queryMenu').then(res => {
                 if (res.data === 404) {
-                    this.$router.push(this.$login)
-                    this.$message.error(this.$error)
+                    // this.$router.push(this.$login)
+                    this.$message.info('您当前未登录')
                 } else {
                     console.log(res)
                     this.uname = res.data[0].uname
@@ -144,37 +101,13 @@ export default {
                     }
                 }
             })
-        //     let userId = this.$route.params.userId
-        //     this.$apis.initMenu({
-        //         userId,
-        //         sid: 1
-        //     }).then(res => {
-        //         if (res.code === '2000') {
-        //             this.menus = res.data.menus
-        //             this.userInfo = res.data.userInfo
-        //         }
-        //     }).catch(error => {
-        //         console.error(error.message)
-        //     })
         },
-        // returnValue () {
-        //     // let a = this.$route.params.name
-        //     // this.userInfo.name = a
-        //     let b = '2'
-        //     b = this.$route.params.admin
-        //     if (b === undefined) {
-        //         b = '2'
-        //     }
-        //     if (b === '2') {
-        //         this.$router.push('/login')
-        //         this.$message.error('请先登录！')
-        //     }
-        // }
         signOut () {
             this.$axios.get('/logout').then(res => {
-                if (res.data === 1) {
+                if (res.data === 404) {
                     this.$router.push(this.$login)
-                    document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+                } else {
+                    this.$router.push(this.$login)
                     this.$message.success('已退出登录！')
                 }
             })

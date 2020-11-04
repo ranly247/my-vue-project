@@ -8,9 +8,15 @@
         :before-close="handleClose"
         center
     >
-        <el-form :model="form">
-            <el-form-item label="标题：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.title"/>
+        <el-form :model="form" ref="form">
+            <el-form-item label="标题：" :label-width="formLabelWidth" prop="title" :class="[errors.has('title') ? 'is-error' : '', 'is-required']">
+                <el-input
+                    v-model="form.title"
+                    name="title"
+                    data-vv-as="标题"
+                    v-validate="'required'"
+                />
+                <div class="el-form-item__error" v-if="errors.has('title')">标题为必填项！</div>
             </el-form-item>
             <el-form-item label="介绍：" :label-width="formLabelWidth" required>
                 <el-input v-model="form.about"  type="textarea" :rows="4"/>

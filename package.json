@@ -17,6 +17,7 @@
     "axios": "^0.21.0",
     "element-ui": "^2.13.2",
     "sortablejs": "^1.12.0",
+    "vee-validate": "^2.0.0-rc.25",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "wangeditor": "^4.1.0"

@@ -9,7 +9,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import imgApi from './utils/imgUpload.js'
 import formatDate from './utils/formateDate.js'
 import Menu from './utils/intMenu.js'
+import veeValidate from './utils/veeValidate'
 
+// 全局使用 element-ui
 Vue.use(ElementUi)
 
 Vue.prototype.$axios = axios
@@ -41,26 +43,13 @@ Vue.prototype.$news = Menu.menu.news
 Vue.prototype.$sale = Menu.menu.sale
 Vue.prototype.$ranly = Menu.menu.ranly
 
-// Vue.prototype.$banner = {
-//     children: [
-//         {
-//             disabled: false,
-//             menuIcon: '',
-//             menuId: 11,
-//             menuName: 'banner',
-//             menuPath: 'banner',
-//             menuRemark: '“我是备注”',
-//             parentMenuId: 1
-//         }
-//     ],
-//     disabled: false,
-//     menuIcon: 'el-icon-location-information',
-//     menuId: 1,
-//     menuName: 'banner管理',
-//     menuPath: 'a',
-//     menuRemark: '',
-//     parentMenuId: 0
-// }
+// 配置表单验证
+// 全局使用 vee-validate
+Vue.use(veeValidate, {
+    locale: 'zh_CN',
+    fieldsBagName: 'errorBag',
+    events: 'blur|input'
+})
 
 /* eslint-disable no-new */
 new Vue({

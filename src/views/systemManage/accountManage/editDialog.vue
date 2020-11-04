@@ -7,16 +7,16 @@
         center
     >
         <el-form :model="form">
-            <el-form-item label="用户名：" :label-width="formLabelWidth" required>
+            <el-form-item label="用户名：" :label-width="formLabelWidth">
                 {{ form.uname }}
             </el-form-item>
-            <el-form-item label="账号：" :label-width="formLabelWidth" required>
+            <el-form-item label="账号：" :label-width="formLabelWidth">
                 {{ form.uaccount }}
             </el-form-item>
-            <el-form-item label="权限：" :label-width="formLabelWidth" required>
-                <el-checkbox true-label="1" v-model="form.banner" name="banner">banner管理</el-checkbox>
-                <el-checkbox true-label="2" v-model="form.news" name="news">新闻管理</el-checkbox>
-                <el-checkbox true-label="3" v-model="form.sale" name="sale">商品管理</el-checkbox>
+            <el-form-item label="权限：" :label-width="formLabelWidth">
+                <el-checkbox true-label="1" false-label='' v-model="form.banner" name="banner">banner管理</el-checkbox>
+                <el-checkbox true-label="2" false-label='' v-model="form.news" name="news">新闻管理</el-checkbox>
+                <el-checkbox true-label="3" false-label='' v-model="form.sale" name="sale">商品管理</el-checkbox>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -33,19 +33,6 @@ export default {
             editVisible: false,
             form: {},
             formLabelWidth: '100px'
-            // menu: [{
-            //     id: 1,
-            //     menuName: 'banner',
-            //     value: '1'
-            // }, {
-            //     id: 2,
-            //     menuName: 'news',
-            //     value: '2'
-            // }, {
-            //     id: 3,
-            //     menuName: 'sale',
-            //     value: '3'
-            // }]
         }
     },
     props: {
@@ -60,9 +47,10 @@ export default {
             this.editVisible = val
             this.form = {...this.dialogData}
             let arr = this.dialogData.permission
+            console.log(arr)
             for (let key in arr) {
-                // arr[key] === 'banner,' ? this.form.banner = '1' : (arr[key] === 'news,' ? this.form.news = '2' : this.form.sale = '3')
-                arr[key] === 'banner,' ? this.form.banner = true : (arr[key] === 'news,' ? this.form.news = true : this.form.sale = true)
+                arr[key] === 'banner,' ? this.form.banner = '1' : (arr[key] === 'news,' ? this.form.news = '2' : this.form.sale = '3')
+                // arr[key] === 'banner,' ? this.banner = true : (arr[key] === 'news,' ? this.form.news = true : this.form.sale = true)
                 // arr[key] === 'banner,' ? this.form.arr.push(true) : (arr[key] === 'news,' ? this.form.arr.push(true) : this.form.arr.push(true))
             }
         },
