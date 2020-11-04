@@ -58,7 +58,7 @@ export default {
         },
         queryBanner () {
             this.tableLoading = true
-            this.$axios.get('/queryBanner').then(res => {
+            this.$axios.get('/queryRankBanner').then(res => {
                 this.tableLoading = false
                 this.tableData = res.data
             }).catch(err => {

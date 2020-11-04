@@ -9,39 +9,73 @@
         center
     >
         <el-form :model="form">
-            <el-form-item label="标题：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.title"/>
+            <el-form-item label="标题：" :label-width="formLabelWidth" prop="title" :class="[errors.has('title') ? 'is-error' : '', 'is-required']">
+                <el-input
+                    v-model="form.title"
+                    name="title"
+                    data-vv-as="标题"
+                    v-validate="'required'"
+                />
+                <div class="el-form-item__error" v-if="errors.has('title')">标题为必填项！</div>
             </el-form-item>
-            <el-form-item label="类型：" :label-width="formLabelWidth" required>
-                <el-select v-model="form.newsType" placeholder="请选择" size="mini">
+             <el-form-item label="类型：" :label-width="formLabelWidth" prop="type" :class="[errors.has('type') ? 'is-error' : '', 'is-required']">
+                <el-select
+                    v-model="form.newsType"
+                    placeholder="请选择"
+                    size="mini"
+                    name="type"
+                    data-vv-as="类型"
+                    v-validate="'required'"
+                >
                     <el-option label="游戏" :value="1"></el-option>
                     <el-option label="其他" :value="2"></el-option>
                     <el-option label="杂志" :value="3"></el-option>
                     <el-option label="唱片" :value="4"></el-option>
                 </el-select>
+                <div class="el-form-item__error" v-if="errors.has('type')">选一个咯！</div>
             </el-form-item>
-            <el-form-item label="封面：" :label-width="formLabelWidth" required>
-                <input type="file" accept="image/*" @change="uploadImg()" class="imgUpload"/>
+            <el-form-item label="封面：" :label-width="formLabelWidth" prop="img" :class="[errors.has('about') ? 'is-error' : '', 'is-required']">
+                <input
+                    type="file"
+                    accept="image/*"
+                    @change="uploadImg()"
+                    class="imgUpload"
+                    name="img"
+                    data-vv-as="图片"
+                    v-validate="'required'"
+                />
                 <el-image
                     style="width: 300px; height: 170px"
                     :src="imgUrl"
                     fit="contain"
+                    placeholder="上传中..."
                 />
+                <div class="el-form-item__error" v-if="errors.has('img')">图片还没选呢！</div>
             </el-form-item>
-            <el-form-item label="新闻内容：" :label-width="formLabelWidth" required>
+            <el-form-item label="新闻内容：" :label-width="formLabelWidth" prop="richText" :class="[errors.has('richText') ? 'is-error' : '', 'is-required']">
                 <!-- 富文本编辑器 -->
-                <rich-text-editor v-model="form.about"/>
+                <rich-text-editor
+                    v-model="form.about"
+                    name="richText"
+                    data-vv-as="新闻内容"
+                    v-validate="'required|editorWords'"
+                />
+                <div class="el-form-item__error" v-if="errors.has('richText')">{{errors.first('richText')}}</div>
             </el-form-item>
-            <el-form-item label="发布日期：" :label-width="formLabelWidth" required>
+            <el-form-item label="发布日期：" :label-width="formLabelWidth" prop="date" :class="[errors.has('date') ? 'is-error' : '', 'is-required']">
                 <div class="block">
                     <!-- <span class="demonstration">带快捷选项</span> -->
                     <el-date-picker
-                    v-model="form.publishDay"
-                    align="right"
-                    type="date"
-                    placeholder="选择日期"
-                    :picker-options="pickerOptions">
-                    </el-date-picker>
+                        v-model="form.publishDay"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions"
+                        name="date"
+                        data-vv-as="日期"
+                        v-validate="'required'"
+                    />
+                    <div class="el-form-item__error" v-if="errors.has('date')">选个日期呗</div>
                 </div>
             </el-form-item>
         </el-form>
@@ -131,22 +165,29 @@ export default {
             }
         },
         submit () {
-            let params = {
-                title: this.form.title,
-                newsType: this.form.newsType,
-                img: this.imgUrl,
-                about: this.form.about,
-                publishDay: this.form.publishDay
-            }
-            this.$axios.post('/addNews', params).then(res => {
-                console.log(res)
-                if (res.status === 200) {
-                    this.$message.success('添加成功！')
-                    this.$parent.queryNews()
-                    this.addVisible = false
+            this.$validator.validateAll().then((valid) => {
+                if (valid) {
+                    let params = {
+                        title: this.form.title,
+                        newsType: this.form.newsType,
+                        img: this.imgUrl,
+                        about: this.form.about,
+                        publishDay: this.form.publishDay
+                    }
+                    this.$axios.post('/addNews', params).then(res => {
+                        if (res.status === 200) {
+                            this.$message.success('添加成功！')
+                            this.$nextTick(() => {
+                                this.$refs['form'].resetFields()
+                                this.imgUrl = ''
+                            })
+                            this.$parent.queryNews()
+                            this.addVisible = false
+                        }
+                    }).catch(error => {
+                        console.error(error.message)
+                    })
                 }
-            }).catch(error => {
-                console.error(error.message)
             })
         }
     }

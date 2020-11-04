@@ -18,16 +18,34 @@
                 />
                 <div class="el-form-item__error" v-if="errors.has('title')">标题为必填项！</div>
             </el-form-item>
-            <el-form-item label="介绍：" :label-width="formLabelWidth" required>
-                <el-input v-model="form.about"  type="textarea" :rows="4"/>
+            <el-form-item label="介绍：" :label-width="formLabelWidth" prop="about" :class="[errors.has('about') ? 'is-error' : '', 'is-required']">
+                <el-input
+                    v-model="form.about"
+                    type="textarea"
+                    :rows="4"
+                    name="about"
+                    data-vv-as="介绍"
+                    v-validate="'required'"
+                />
+                <div class="el-form-item__error" v-if="errors.has('about')">随便写点咯！</div>
             </el-form-item>
-            <el-form-item label="封面：" :label-width="formLabelWidth" required>
-                <input type="file" accept="image/*" @change="uploadImg()" class="imgUpload"/>
+            <el-form-item label="封面：" :label-width="formLabelWidth" prop="img" :class="[errors.has('about') ? 'is-error' : '', 'is-required']">
+                <input
+                    type="file"
+                    accept="image/*"
+                    @change="uploadImg()"
+                    class="imgUpload"
+                    name="img"
+                    data-vv-as="图片"
+                    v-validate="'required'"
+                />
                 <el-image
                     style="width: 300px; height: 170px"
-                    :src="imgUrl"
+                    :src="form.imgUrl"
                     fit="contain"
+                    placeholder="上传中..."
                 />
+                <div class="el-form-item__error" v-if="errors.has('img')">图片还没选呢！</div>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -44,8 +62,8 @@ export default {
             addVisible: this.show,
             form: {},
             formLabelWidth: '80px',
-            fileList: [],
-            imgUrl: ''
+            fileList: []
+            // imgUrl: ''
         }
     },
     props: {
@@ -88,30 +106,38 @@ export default {
                     }).then(res => {
                         // console.log('url', res.data.result.url)
                         let url = res.data.result.url
-                        this.imgUrl = url
+                        this.form.imgUrl = url
                     })
                 }
                 reader.readAsDataURL(file) // 将 Blob 或 File 对象转成base64
             }
         },
         submit () {
-            let params = {
-                title: this.form.title,
-                about: this.form.about,
-                img: this.imgUrl
-            }
-            this.$axios.post('/addBanner', params).then(res => {
-                console.log(res)
-                if (res.data === 404) {
-                    this.$message.error(this.$error)
-                    this.$router.push(this.$login)
-                } else if (res.status === 200) {
-                    this.$message.success('添加成功！')
-                    this.$parent.queryBanner()
-                    this.addVisible = false
+            this.$validator.validateAll().then((valid) => {
+                if (valid) {
+                    let params = {
+                        title: this.form.title,
+                        about: this.form.about,
+                        img: this.form.imgUrl
+                    }
+                    this.$axios.post('/addBanner', params).then(res => {
+                        if (res.data === 404) {
+                            this.$message.error(this.$error)
+                            this.$router.push(this.$login)
+                        } else if (res.status === 200) {
+                            this.$message.success('添加成功！')
+                            this.$nextTick(() => {
+                                this.$refs['form'].resetFields()
+                                this.form.imgUrl = ''
+                            })
+                            this.$parent.queryBanner()
+                            this.addVisible = false
+                        }
+                    }).catch(error => {
+                        this.$message.error('添加失败...')
+                        console.error(error.message)
+                    })
                 }
-            }).catch(error => {
-                console.error(error.message)
             })
         }
     }

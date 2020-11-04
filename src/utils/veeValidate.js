@@ -46,8 +46,8 @@ const dictionary = {
             max: (field, data) => `${field}最大长度不能超过${data[0]}`,
             min: (field, data) => `${field}最小长度不能小于${data[0]}`,
             digits: (field, data) => `${field}必须为数字，且长度必须等于${data[0]}`,
-            min_value: (field, data) => `${field}数值不能小于${data[0]}`,
-            max_value: (field, data) => `${field}数值不能大于${data[0]}`,
+            min_value: (field, data) => `${field}这么便宜怎么恰肥宅烂钱`,
+            max_value: (field, data) => `${field}超过${data[0]}日元不建议卖给肥宅哦！`,
             not_in: (field, data) => `${field}不能为${data.join(',')}`
         }
     }
@@ -157,7 +157,8 @@ Validator.extend('maxArray', {
 // 富文本限制字数
 Validator.extend('editorWords', {
     messages: {
-        zh_CN: () => '字数不超过1000'
+        zh_CN: () => '按啥呢，一直点'
+        // zh_CN: () => '字数不超过1000'
     },
     validate: value => {
         value = value + ''
