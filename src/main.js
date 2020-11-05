@@ -51,6 +51,9 @@ Vue.use(veeValidate, {
     events: 'blur|input'
 })
 
+//
+Vue.prototype.$img = '@/assets/lbl_game.png'
+
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
