@@ -52,6 +52,7 @@
                 />
                 <div class="el-form-item__error" v-if="errors.has('img')">图片还没选呢！</div>
             </el-form-item>
+            <span class="tips">&#128293;为取得最佳体验，请上传长宽比4:3的图片</span>
             <el-form-item label="新闻内容：" :label-width="formLabelWidth" prop="richText" :class="[errors.has('richText') ? 'is-error' : '', 'is-required']">
                 <!-- 富文本编辑器 -->
                 <rich-text-editor
@@ -193,3 +194,6 @@ export default {
     }
 }
 </script>
+<style lang="less" scoped>
+@import '../span.less';
+</style>

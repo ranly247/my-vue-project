@@ -47,6 +47,7 @@
                 />
                 <div class="el-form-item__error" v-if="errors.has('img')">图片还没选呢！</div>
             </el-form-item>
+            <span class="tips">&#128293;为取得最佳体验，请上传长宽比4:3的图片</span>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="addVisible = false">取 消</el-button>
@@ -143,3 +144,6 @@ export default {
     }
 }
 </script>
+<style lang="less" scoped>
+@import '../span.less';
+</style>

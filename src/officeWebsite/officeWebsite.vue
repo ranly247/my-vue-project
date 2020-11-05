@@ -70,6 +70,7 @@
                     <div class="shopAbout">
                         <div class="shopTitle">{{ item.title }}</div>
                         <div class="shopPublishDay">{{ item.publishDay }}</div>
+                        <div class="shopPrice">{{ item.price }}円(税后)</div>
                         <img v-show="item.shoppingType === 1" src="@/assets/lbl_game.png" alt="">
                         <img v-show="item.shoppingType === 2" src="@/assets/lbl_other.png" alt="">
                         <img v-show="item.shoppingType === 3" src="@/assets/lbl_magazine.png" alt="">
@@ -167,11 +168,25 @@ export default {
             this.editDialog = true
             this.rowData = params
             // console.log(this.newsArr[params].about)
+        },
+        querySale () {
+            this.$axios.get('/index/querySale').then(res => {
+                if (res.status === 200) {
+                    console.log(res.data)
+                    this.shopping = res.data
+                    this.shopping.forEach((e, index) => {
+                        this.shopping[index].publishDay = this.$fd.formateDate(this.shopping[index].publishDay)
+                    })
+                }
+            }).catch(error => {
+                console.error(error.message)
+            })
         }
     },
     created () {
         this.queryBanner()
         this.queryNews()
+        this.querySale()
     }
 }
 </script>
