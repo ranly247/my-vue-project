@@ -76,7 +76,7 @@ export default {
                         let arr2 = []
                         let arr = this.tableData[index].permission.split('')
                         for (let key in arr) {
-                            arr[key] === '1' ? arr2.push('banner,') : (arr[key] === '2' ? arr2.push('news,') : arr2.push('sale'))
+                            arr[key] === '1' ? arr2.push('banner,') : (arr[key] === '2' ? arr2.push('news,') : arr2.push('sale,'))
                         }
                         this.tableData[index].permission = arr2
                     })
