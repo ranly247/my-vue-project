@@ -64,7 +64,6 @@
             </el-form-item>
             <el-form-item label="上架日期：" :label-width="formLabelWidth" prop="date" :class="[errors.has('date') ? 'is-error' : '', 'is-required']">
                 <div class="block">
-                    <!-- <span class="demonstration">带快捷选项</span> -->
                     <el-date-picker
                         v-model="form.publishDay"
                         align="right"
