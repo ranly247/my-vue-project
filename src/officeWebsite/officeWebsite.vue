@@ -61,6 +61,27 @@
                     <div class="newsTitle">{{ item.title }}</div>
                     <div class="more" @click="more(item)">详细内容</div>
                 </div>
+                <div class="newsHeader">关联店铺</div>
+                <div class="newsItem" v-for="item in cafe" :key="item.index">
+                    <div class="img">
+                        <img :src="item.img" alt="">
+                    </div>
+                    <div class="newsTitle">{{ item.title }}</div>
+                </div>
+                <div class="newsHeader">街机频道</div>
+                <div class="newsItem">
+                    <div class="img">
+                        <img src="@/assets/edamame.jpg" alt="">
+                    </div>
+                    <div class="newsTitle">EDAMAME街机频道</div>
+                </div>
+                <div class="newsHeader">其他游戏</div>
+                <div class="ogame" v-for="item in game" :key="item.index">
+                    <div class="ogameImg">
+                        <img :src="item.img" alt="">
+                    </div>
+                    <span>{{ item.title }}</span>
+                </div>
             </div>
             <div class="shopping">
                 <div class="shoppingHeader">实体商品</div>
@@ -76,8 +97,23 @@
                         <img v-show="item.shoppingType === 3" src="@/assets/lbl_magazine.png" alt="">
                     </div>
                 </div>
+                <div class="shoppingHeader">E-stroe</div>
+                <div class="shopItem" v-for="item in store" :key="item.index">
+                    <img :src="item.img" alt="">
+                    <div class="shopAbout">
+                        <div class="shopTitle">{{ item.title }}</div>
+                        <div class="shopPublishDay">{{ item.publishDay }}</div>
+                        <div class="shopPrice">{{ item.price }}円(税后)</div>
+                        <img v-show="item.shoppingType === 1" src="@/assets/lbl_game.png" alt="">
+                        <img v-show="item.shoppingType === 2" src="@/assets/lbl_other.png" alt="">
+                        <img v-show="item.shoppingType === 3" src="@/assets/lbl_magazine.png" alt="">
+                        <img v-show="item.shoppingType === 4" src="@/assets/lbl_music.png" alt="">
+                    </div>
+                </div>
             </div>
         </div>
+        <footer>
+        </footer>
         <edit-dialog v-model="editDialog" :dialogData="rowData"/>
     </div>
 </template>
@@ -131,7 +167,46 @@ export default {
             newsArr: [],
             editDialog: false,
             rowData: [],
-            shopping: []
+            shopping: [],
+            store: [],
+            cafe: [{
+                cid: 1,
+                img: 'https://pic.downk.cc/item/5f4e1aab160a154a678a1f6a.jpg',
+                title: 'Altonia(东新宿区)'
+            }, {
+                cid: 2,
+                img: 'https://pic.downk.cc/item/5f4e1ab6160a154a678a2d89.jpg',
+                title: 'Square Enix Cafe(秋叶原)'
+            }, {
+                cid: 3,
+                img: 'https://pic.downk.cc/item/5f4e1ab0160a154a678a26d1.jpg',
+                title: '大版广场咖啡厅(梅田)'
+            }],
+            game: [{
+                gid: 1,
+                img: 'https://pic.downk.cc/item/5f4eed3f160a154a67c83f0d.png',
+                title: '极端的边缘'
+            }, {
+                gid: 2,
+                img: 'https://pic.downk.cc/item/5f4eed09160a154a67c835b5.jpg',
+                title: '百万亚瑟王'
+            }, {
+                gid: 3,
+                img: 'https://pic.downk.cc/item/5f4eed29160a154a67c83b19.png',
+                title: '佐贺'
+            }, {
+                gid: 4,
+                img: 'https://pic.downk.cc/item/5f4eece3160a154a67c82f47.png',
+                title: '王国之心'
+            }, {
+                gid: 5,
+                img: 'https://pic.downk.cc/item/5f4eec7f160a154a67c81f0e.png',
+                title: '勇者斗恶龙'
+            }, {
+                gid: 6,
+                img: 'https://pic.downk.cc/item/5f4eecbb160a154a67c827dd.png',
+                title: '最终幻想'
+            }]
         }
     },
     methods: {
@@ -181,12 +256,26 @@ export default {
             }).catch(error => {
                 console.error(error.message)
             })
+        },
+        queryStroe () {
+            this.$axios.get('/index/queryEstore').then(res => {
+                if (res.status === 200) {
+                    console.log(res.data)
+                    this.store = res.data
+                    this.store.forEach((e, index) => {
+                        this.store[index].publishDay = this.$fd.formateDate(this.store[index].publishDay)
+                    })
+                }
+            }).catch(error => {
+                console.error(error.message)
+            })
         }
     },
     created () {
         this.queryBanner()
         this.queryNews()
         this.querySale()
+        this.queryStroe()
     }
 }
 </script>
