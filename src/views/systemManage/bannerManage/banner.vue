@@ -85,7 +85,7 @@ export default {
             this.$axios.get('/queryBanner', {params}).then(res => {
                 if (res.data === 404) {
                     this.$message.error(this.$error)
-                    this.$router.push(this.$login)
+                    this.$router.push(this.$store.state.login)
                 } else {
                     this.tableLoading = false
                     this.tableData = res.data

@@ -124,7 +124,7 @@ export default {
                     this.$axios.post('/addBanner', params).then(res => {
                         if (res.data === 404) {
                             this.$message.error(this.$error)
-                            this.$router.push(this.$login)
+                            this.$router.push(this.$store.state.login)
                         } else if (res.status === 200) {
                             this.$message.success('添加成功！')
                             this.$nextTick(() => {

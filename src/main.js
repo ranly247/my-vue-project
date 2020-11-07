@@ -10,6 +10,10 @@ import imgApi from './utils/imgUpload.js'
 import formatDate from './utils/formateDate.js'
 import Menu from './utils/intMenu.js'
 import veeValidate from './utils/veeValidate'
+import store from '@/store/index'
+import apis from '@/apis/index'
+
+Vue.prototype.$api = apis
 
 // 全局使用 element-ui
 Vue.use(ElementUi)
@@ -30,10 +34,10 @@ Vue.prototype.$manageInfo = {
     name: 'squareEnix官网'
 }
 // cookie失效，路由跳转的登录页面
-Vue.prototype.$login = {
-    path: '/login',
-    name: 'login'
-}
+// Vue.prototype.$login = {
+//     path: '/login',
+//     name: 'login'
+// }
 // 跳转登录页面提示信息
 Vue.prototype.$error = '登录信息失效，请重新登录'
 
@@ -51,13 +55,11 @@ Vue.use(veeValidate, {
     events: 'blur|input'
 })
 
-//
-Vue.prototype.$img = '@/assets/lbl_game.png'
-
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
     template: '<App/>'
 })

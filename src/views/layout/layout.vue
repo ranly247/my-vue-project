@@ -85,6 +85,7 @@ export default {
     },
     methods: {
         initMenu () {
+            // this.$api.queryMenu.then(res => {
             this.$axios.get('/queryMenu').then(res => {
                 if (res.data === 404) {
                     // this.$router.push(this.$login)
@@ -105,9 +106,9 @@ export default {
         signOut () {
             this.$axios.get('/logout').then(res => {
                 if (res.data === 404) {
-                    this.$router.push(this.$login)
+                    this.$router.push(this.$store.state.login)
                 } else {
-                    this.$router.push(this.$login)
+                    this.$router.push(this.$store.state.login)
                     this.$message.success('已退出登录！')
                 }
             })
