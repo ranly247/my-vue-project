@@ -85,13 +85,13 @@ export default {
     },
     methods: {
         initMenu () {
-            // this.$api.queryMenu.then(res => {
             this.$axios.get('/queryMenu').then(res => {
+            // this.$axios.get('/queryMenu').then(res => {
                 if (res.data === 404) {
                     // this.$router.push(this.$login)
                     this.$message.info('您当前未登录')
                 } else {
-                    console.log(res)
+                    // console.log(res)
                     this.uname = res.data[0].uname
                     let arr = (res.data[0].permission || '').split('')
                     for (let key in arr) {
