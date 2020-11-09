@@ -16,7 +16,7 @@
                                 :class="[errors.has('account') ? 'is-error' : '', 'is-required']"
                             >
                                 <el-input
-                                    v-model="loginForm.account"
+                                    v-model.trim="loginForm.account"
                                     name="account"
                                     data-vv-as="账号"
                                     v-validate="'required|numeric'"
@@ -29,7 +29,7 @@
                                 :class="[errors.has('pwd') ? 'is-error' : '', 'is-required']"
                             >
                                 <el-input
-                                    v-model="loginForm.pwd"
+                                    v-model.trim="loginForm.pwd"
                                     show-password
                                     name="pwd"
                                     data-vv-as="密码"
@@ -56,7 +56,7 @@
                                 :class="[errors.has('account2') ? 'is-error' : '', 'is-required']"
                             >
                                 <el-input
-                                    v-model="form.account"
+                                    v-model.trim="form.account"
                                     size="mini"
                                     name="account2"
                                     data-vv-as="账号"
@@ -70,7 +70,7 @@
                                 :class="[errors.has('uname') ? 'is-error' : '', 'is-required']"
                             >
                                 <el-input
-                                    v-model="form.uname"
+                                    v-model.trim="form.uname"
                                     size="mini"
                                     name="uname"
                                     data-vv-as="用户名"
@@ -84,7 +84,7 @@
                                 :class="[errors.has('pwd2') ? 'is-error' : '', 'is-required']"
                             >
                                 <el-input
-                                    v-model="form.pwd"
+                                    v-model.trim="form.pwd"
                                     show-password
                                     name="pwd2"
                                     data-vv-as="密码"
@@ -93,7 +93,7 @@
                                 <div class="el-form-item__error" v-if="errors.has('pwd2')">{{errors.first('pwd2')}}</div>
                             </el-form-item>
                             <el-form-item label="确认密码:" :label-width="label">
-                                <el-input v-model="form.pwdSec" size="mini" show-password/>
+                                <el-input v-model.trim="form.pwdSec" size="mini" show-password/>
                                 <div class="el-form-item__error" v-show="this.form.pwdSec !== this.form.pwd">两次密码输入不一致</div>
                             </el-form-item>
                             <span class="footer">

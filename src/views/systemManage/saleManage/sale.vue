@@ -3,7 +3,7 @@
         <el-row>
             <el-button type="primary" icon="el-icon-plus" @click="add">增加</el-button>
             <!-- <el-button type="primary" icon="el-icon-top" @click="rank">排序</el-button> -->
-            <el-input v-model="input" placeholder="请输入标题" clearable/>
+            <el-input v-model.trim="input" placeholder="请输入标题" clearable/>
             <el-button type="success" icon="el-icon-search" @click="querySale">搜索</el-button>
         </el-row>
         <el-table

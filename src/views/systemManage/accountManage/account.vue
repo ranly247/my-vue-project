@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <!-- <el-button type="primary" icon="el-icon-top" @click="rank">排序</el-button> -->
-            <el-input v-model="input" placeholder="请输入账号" clearable/>
+            <el-input v-model.trim="input" placeholder="请输入账号" clearable/>
             <el-button type="success" icon="el-icon-search" @click="queryUser">搜索</el-button>
         </el-row>
         <el-table
