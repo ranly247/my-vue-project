@@ -67,7 +67,7 @@ export default {
             }
             this.$axios.get(this.$api.account.queryUser, {params}).then(res => {
                 if (res.data === 404) {
-                    this.$message.error(this.$error)
+                    // this.$message.error(this.$error)
                     this.$router.push(this.$store.state.login)
                 } else {
                     this.tableLoading = false

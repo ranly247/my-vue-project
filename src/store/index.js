@@ -7,7 +7,10 @@ const state = {
     count: 0,
     login: {
         path: '/login',
-        name: 'login'
+        name: 'login',
+        params: {
+            token: 2
+        }
     }
 }
 export default new Vuex.Store({

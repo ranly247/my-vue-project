@@ -83,7 +83,7 @@ export default {
             }
             this.$axios.get(this.$api.estore.queryEstore, {params}).then(res => {
                 if (res.data === 404) {
-                    this.$message.error(this.$error)
+                    // this.$message.error(this.$error)
                     this.$router.push(this.$store.state.login)
                 } else {
                     this.tableLoading = false

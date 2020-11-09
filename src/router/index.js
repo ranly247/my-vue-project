@@ -11,6 +11,7 @@ import Estore from '@/views/systemManage/eStoreManage/estore'
 import Welcome from '@/views/welcome/welcome'
 import Account from '@/views/systemManage/accountManage/account'
 import OfficeWebsite from '@/officeWebsite/officeWebsite'
+import { Message } from 'element-ui'
 
 Vue.use(Router)
 
@@ -19,7 +20,26 @@ export default new Router({
         {
             path: '/login',
             name: 'login',
-            component: Login
+            component: Login,
+            beforeEnter: (to, from, next) => {
+                console.log(from)
+                if (from.name === null) {
+                    next()
+                    return
+                }
+                if (to.params.token === 1) {
+                    Message.info('已返回登录界面')
+                    next()
+                } else if (to.params.token === 2) {
+                    Message.error('登录信息已失效，请重新登录')
+                    next()
+                } else if (to.params.token === 3) {
+                    Message.success('已退出登录')
+                    next()
+                } else {
+                    next()
+                }
+            }
         }, {
             path: '/test',
             name: 'axios',
@@ -27,6 +47,7 @@ export default new Router({
         }, {
             path: '/',
             name: 'layout',
+            // component: Layout,
             component: Layout,
             children: [{
                 path: '/banner',

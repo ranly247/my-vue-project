@@ -33,13 +33,14 @@ axios.defaults.withCredentials = true
 Vue.prototype.$manageInfo = {
     name: 'squareEnix官网'
 }
+Vue.prototype.$uname = '未登录'
 // cookie失效，路由跳转的登录页面
 // Vue.prototype.$login = {
 //     path: '/login',
 //     name: 'login'
 // }
 // 跳转登录页面提示信息
-Vue.prototype.$error = '登录信息失效，请重新登录'
+// Vue.prototype.$error = '登录信息已失效，请重新登录'
 
 // 配置菜单
 Vue.prototype.$banner = Menu.menu.banner

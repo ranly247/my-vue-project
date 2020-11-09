@@ -2,7 +2,7 @@
     <el-container class="layoutPage">
         <el-header class="layoutHeader" height="48px">
             <label class="titleName">{{ $manageInfo.name }}</label>
-            <label class="name">{{ uname }}</label>
+            <label class="name">{{ $uname }}</label>
             <img @click="signOut" class="signoutImg" src="@/assets/icon_signout.png" alt="退出">
             <!-- <img @click="handleSignOut" class="signoutImg" src="@/assets/images/icon_signout.png" alt="退出"> -->
         </el-header>
@@ -75,7 +75,7 @@ export default {
                 // this.$sale,
                 // this.$ranly
             ],
-            uname: '未登录',
+            // uname: '未登录',
             routerViewHeight: 300
         }
     },
@@ -90,10 +90,10 @@ export default {
             // this.$axios.get('/queryMenu').then(res => {
                 if (res.data === 404) {
                     // this.$router.push(this.$login)
-                    this.$message.info('您当前未登录')
+                    // this.$message.info('您当前未登录')
                 } else {
                     // console.log(res)
-                    this.uname = res.data[0].uname
+                    this.$uname = res.data[0].uname
                     let arr = (res.data[0].permission || '').split('')
                     for (let key in arr) {
                         arr[key] === '1' ? this.menus.push(this.$banner) : (arr[key] === '2' ? this.menus.push(this.$news) : this.menus.push(this.$sale))
@@ -108,10 +108,22 @@ export default {
             // this.$axios.get('/logout').then(res => {
             this.$axios.get(this.$api.layout.logout).then(res => {
                 if (res.data === 404) {
-                    this.$router.push(this.$store.state.login)
+                    this.$router.push({
+                        path: '/login',
+                        name: 'login',
+                        params: {
+                            token: 1
+                        }
+                    })
                 } else {
-                    this.$router.push(this.$store.state.login)
-                    this.$message.success('已退出登录！')
+                    this.$router.push({
+                        path: '/login',
+                        name: 'login',
+                        params: {
+                            token: 3
+                        }
+                    })
+                    // this.$message.success('已退出登录！')
                 }
             })
         }
