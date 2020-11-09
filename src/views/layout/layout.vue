@@ -75,7 +75,7 @@ export default {
                 // this.$sale,
                 // this.$ranly
             ],
-            uname: '',
+            uname: '未登录',
             routerViewHeight: 300
         }
     },
@@ -85,7 +85,8 @@ export default {
     },
     methods: {
         initMenu () {
-            this.$axios.get('/queryMenu').then(res => {
+            // this.$axios.get('/queryMenu').then(res => {
+            this.$axios.get(this.$api.layout.queryMenu).then(res => {
             // this.$axios.get('/queryMenu').then(res => {
                 if (res.data === 404) {
                     // this.$router.push(this.$login)
@@ -104,7 +105,8 @@ export default {
             })
         },
         signOut () {
-            this.$axios.get('/logout').then(res => {
+            // this.$axios.get('/logout').then(res => {
+            this.$axios.get(this.$api.layout.logout).then(res => {
                 if (res.data === 404) {
                     this.$router.push(this.$store.state.login)
                 } else {

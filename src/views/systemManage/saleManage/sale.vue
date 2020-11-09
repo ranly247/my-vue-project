@@ -81,7 +81,7 @@ export default {
             let params = {
                 title: this.input || ''
             }
-            this.$axios.get('/querySale', {params}).then(res => {
+            this.$axios.get(this.$api.sale.querySale, {params}).then(res => {
                 if (res.data === 404) {
                     this.$message.error(this.$error)
                     this.$router.push(this.$store.state.login)
@@ -112,7 +112,7 @@ export default {
                 let params = {
                     ssid: row.ssid
                 }
-                this.$axios.post('/delSale', params).then(res => {
+                this.$axios.post(this.$api.sale.delSale, params).then(res => {
                     console.log(res)
                     if (res.status === 200) {
                         this.$message.success('已删除')

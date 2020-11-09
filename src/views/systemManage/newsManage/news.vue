@@ -89,7 +89,7 @@ export default {
             let params = {
                 title: this.input || ''
             }
-            this.$axios.get('/queryNews', {params}).then(res => {
+            this.$axios.get(this.$api.news.queryNews, {params}).then(res => {
                 if (res.data === 404) {
                     this.$message.error(this.$error)
                     this.$router.push(this.$store.state.login)
@@ -120,7 +120,7 @@ export default {
                 let params = {
                     nid: row.nid
                 }
-                this.$axios.post('/delNews', params).then(res => {
+                this.$axios.post(this.$api.news.delNews, params).then(res => {
                     if (res.status === 200) {
                         this.$message.success('已删除')
                         this.queryNews()

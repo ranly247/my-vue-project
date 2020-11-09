@@ -121,7 +121,8 @@ export default {
                         about: this.form.about,
                         img: this.form.imgUrl
                     }
-                    this.$axios.post('/addBanner', params).then(res => {
+                    // this.$axios.post('/addBanner', params).then(res => {
+                    this.$axios.post(this.$api.banner.addBanner, params).then(res => {
                         if (res.data === 404) {
                             this.$message.error(this.$error)
                             this.$router.push(this.$store.state.login)

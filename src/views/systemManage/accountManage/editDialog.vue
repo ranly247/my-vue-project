@@ -97,7 +97,8 @@ export default {
                 permission: this.arr2 || '',
                 usid: this.form.usid
             }
-            this.$axios.post('/updateUser', params).then(res => {
+            // this.$axios.post('/updateUser', params).then(res => {
+            this.$axios.post(this.$api.account.updateUser, params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     this.$message.success('修改成功！')

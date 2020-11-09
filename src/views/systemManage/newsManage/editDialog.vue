@@ -132,7 +132,7 @@ export default {
                 publishDay: this.form.publishDay,
                 nid: this.form.nid
             }
-            this.$axios.post('/updateNews', params).then(res => {
+            this.$axios.post(this.$api.news.updateNews, params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     this.$message.success('修改成功！')

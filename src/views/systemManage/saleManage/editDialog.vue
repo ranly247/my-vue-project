@@ -136,7 +136,7 @@ export default {
                 publishDay: this.form.publishDay,
                 ssid: this.form.ssid
             }
-            this.$axios.post('/updateSale', params).then(res => {
+            this.$axios.post(this.$api.sale.updateSale, params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     this.$message.success('修改成功！')

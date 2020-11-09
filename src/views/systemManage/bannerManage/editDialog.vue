@@ -97,7 +97,8 @@ export default {
                 img: this.form.img,
                 bid: this.form.bid
             }
-            this.$axios.post('/updateBanner', params).then(res => {
+            // this.$axios.post('/updateBanner', params).then(res => {
+            this.$axios.post(this.$api.banner.updateBanner, params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     this.$message.success('修改成功！')

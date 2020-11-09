@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <!-- <el-button type="primary" icon="el-icon-top" @click="rank">排序</el-button> -->
-            <el-input v-model="input" placeholder="请输入标题" clearable/>
+            <el-input v-model="input" placeholder="请输入账号" clearable/>
             <el-button type="success" icon="el-icon-search" @click="queryUser">搜索</el-button>
         </el-row>
         <el-table
@@ -65,7 +65,7 @@ export default {
             let params = {
                 account: this.input || ''
             }
-            this.$axios.get('/queryUser', {params}).then(res => {
+            this.$axios.get(this.$api.account.queryUser, {params}).then(res => {
                 if (res.data === 404) {
                     this.$message.error(this.$error)
                     this.$router.push(this.$store.state.login)
@@ -94,7 +94,8 @@ export default {
                 let params = {
                     usid: row.usid
                 }
-                this.$axios.post('/delUser', params).then(res => {
+                // this.$axios.post('/delUser', params).then(res => {
+                this.$axios.post(this.$api.account.delUser, params).then(res => {
                     console.log(res)
                     if (res.status === 200) {
                         this.$message.success('已删除')

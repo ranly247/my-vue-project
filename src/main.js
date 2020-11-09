@@ -14,9 +14,7 @@ import store from '@/store/index'
 import apis from '@/apis/index'
 
 Vue.prototype.$api = apis
-Vue.prototype.$apis = {
-    queryMenu: '/queryMenu'
-}
+
 // 全局使用 element-ui
 Vue.use(ElementUi)
 

@@ -168,7 +168,7 @@ export default {
                         price: this.form.price,
                         publishDay: this.form.publishDay
                     }
-                    this.$axios.post('/addSale', params).then(res => {
+                    this.$axios.post(this.$api.sale.addSale, params).then(res => {
                         if (res.status === 200) {
                             this.$message.success('添加成功！')
                             this.$nextTick(() => {

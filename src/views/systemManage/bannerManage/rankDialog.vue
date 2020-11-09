@@ -58,7 +58,8 @@ export default {
         },
         queryBanner () {
             this.tableLoading = true
-            this.$axios.get('/queryRankBanner').then(res => {
+            // this.$axios.get('/queryRankBanner').then(res => {
+            this.$axios.get(this.$api.banner.queryRankBanner).then(res => {
                 this.tableLoading = false
                 this.tableData = res.data
             }).catch(err => {
@@ -73,7 +74,8 @@ export default {
             let params = {
                 bidArr: bidArr
             }
-            this.$axios.post('/src/main/sortBanner', params).then(res => {
+            // this.$axios.post('/src/main/sortBanner', params).then(res => {
+            this.$axios.post(this.$api.banner.rankBanner, params).then(res => {
                 if (res.status === 200) {
                     this.$message.success('排序完成！')
                     this.addVisible = false

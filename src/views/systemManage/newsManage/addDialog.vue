@@ -175,7 +175,7 @@ export default {
                         about: this.form.about,
                         publishDay: this.form.publishDay
                     }
-                    this.$axios.post('/addNews', params).then(res => {
+                    this.$axios.post(this.$api.news.addNews, params).then(res => {
                         if (res.status === 200) {
                             this.$message.success('添加成功！')
                             this.$nextTick(() => {

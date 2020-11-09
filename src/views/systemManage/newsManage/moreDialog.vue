@@ -63,7 +63,8 @@ export default {
                 about: this.form.about,
                 nid: this.form.nid
             }
-            this.$axios.post('/updateNewsAbout', params).then(res => {
+            // this.$axios.post('/updateNewsAbout', params).then(res => {
+            this.$axios.post(this.$api.news.about, params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     this.$message.success('修改成功！')

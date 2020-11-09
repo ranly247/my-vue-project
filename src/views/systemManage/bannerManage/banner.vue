@@ -82,7 +82,8 @@ export default {
             let params = {
                 title: this.input || ''
             }
-            this.$axios.get('/queryBanner', {params}).then(res => {
+            // this.$axios.get('/queryBanner', {params}).then(res => {
+            this.$axios.get(this.$api.banner.queryBanner, {params}).then(res => {
                 if (res.data === 404) {
                     this.$message.error(this.$error)
                     this.$router.push(this.$store.state.login)
@@ -110,7 +111,8 @@ export default {
                 let params = {
                     bid: row.bid
                 }
-                this.$axios.post('/delBanner', params).then(res => {
+                // this.$axios.post('/delBanner', params).then(res => {
+                this.$axios.post(this.$api.banner.delBanner, params).then(res => {
                     console.log(res)
                     if (res.status === 200) {
                         this.$message.success('已删除')
@@ -133,7 +135,8 @@ export default {
                 isshow: row.isshow,
                 sort: sort
             }
-            this.$axios.post('/changeShow', params).then(res => {
+            // this.$axios.post('/changeShow', params).then(res => {
+            this.$axios.post(this.$api.banner.changeShow, params).then(res => {
                 console.log(res)
                 if (res.status === 200) {
                     row.isshow === 0 ? this.$message.error('已在首页中移除') : this.$message.success('已在首页中展示')
