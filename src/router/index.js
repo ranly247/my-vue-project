@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Login from '@/views/login/login'
-import Axios from '@/views/test/axios'
+// import Axios from '@/views/test/axios'
 import Banner from '@/views/systemManage/bannerManage/banner'
 import News from '@/views/systemManage/newsManage/news'
 import Layout from '@/views/layout/layout'
@@ -12,6 +12,7 @@ import Welcome from '@/views/welcome/welcome'
 import Account from '@/views/systemManage/accountManage/account'
 import OfficeWebsite from '@/officeWebsite/officeWebsite'
 import { Message } from 'element-ui'
+import NFP from '@/views/404/404'
 
 Vue.use(Router)
 
@@ -41,9 +42,9 @@ export default new Router({
                 }
             }
         }, {
-            path: '/test',
-            name: 'axios',
-            component: Axios
+            path: '*',
+            name: '404',
+            component: NFP
         }, {
             path: '/',
             name: 'layout',
